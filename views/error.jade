@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= message
+  h2= error.status+' error - '+request.method +' - '+request.url
+  if request.method=='POST'
+      h3='request body:'
+      ul
+      each val, key in request.body  
+        li <b>#{key}:</b> #{val}
+    
+  pre #{error.stack}

@@ -1,0 +1,26 @@
+extends layout
+
+block content
+  - var turn = game.whosTurn()
+  - var whosTurn = turn==player?'your':turn+"'s"
+  h1= 'It is ' + whosTurn+' turn'
+  table
+    each numbers, color in game.tafel() 
+      tr
+        each number in numbers
+          td.card(style='background-color:'+color)= number
+  h3 your hand:
+  table
+    tr
+      each card in game.yourHand(player)
+        td.card(style='background-color:'+card.color)
+          p= card.number
+  
+  each otherPlayer in game.otherPlayers(player)
+    h3= otherPlayer.name + "'s hand"
+    table
+      tr
+        each card in otherPlayer.cards()
+          td.card(style='background-color:'+card.color)
+            p= card.number
+

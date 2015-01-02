@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  h1 Welcome,  #{name}
+
+  p your games: #{games.length}
+  div
+    ul
+      each game in games
+        li 
+          form(action='/api/arena', method='post')
+            input(type='submit', id='game_'+game.id, value='game')
+            input(type='hidden', name="player", value=name)
+            input(type='hidden', name='game_id', value=game.id)
+            - var players = '';
+            - game.players.forEach(function(p, i, c){if(p.name!=name)players += p.name+(i<c.length-2?', ':';')})
+            - var turn = game.whosTurn()
+            - var whosTurn = turn===name?'your':turn+"'s"
+            label(for='game_'+game.id) with #{players} it is #{whosTurn} turn
+      li
+        form(action='/api/startgame', method='post')
+          input(type='submit', value='Start new game')
+          label(for="players") with
+          input(type="text" value="" name="players" id="players")
+          label(for="players") (seperate names with comma)
+          input(type="hidden" value=name name="name")
+          
+
