@@ -22,7 +22,7 @@ router.post('/startgame', function(req, res) {
 router.get('/register',
         function(req, res) {
             var name = url.parse(req.url, true).query.name;
-            req.db.Game.find({players: {$elemMatch: {name: name}}},
+            req.db.Game.find({players: {$elemMatch: {name: new RegExp(name, 'i')}}},
                 function(error, games){
                     if(error) throw error;
                     res.render('userpage', {name: name, games: games});

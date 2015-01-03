@@ -1,6 +1,6 @@
 extends layout
 block meta
-  if game.whosTurn()==player
+  if game.hisTurn(player)
     meta(js_refresh http-equiv="" content="5")
   else
     meta(http-equiv="refresh" content="5")
@@ -11,7 +11,7 @@ block js
 
 block content
   - var turn = game.whosTurn()
-  - var whosTurn = turn==player?'your':turn+"'s"
+  - var whosTurn = game.hisTurn(player)?'your':turn+"'s"
   h1= 'Welcome, ' + player
   .error
   if game.lives>0

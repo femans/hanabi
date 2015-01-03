@@ -8,12 +8,15 @@ COLORS = ['orange', 'violet', 'green', 'darkcyan', 'red'];
 CARDS = [];
 COLORS.forEach(function(color, b,c){
     for(var i=1; i<=5; i++){
-        for(var j=0; j<6-i; j++){
-            card = {color: color, number: i};
+        for(var j=0; j<10; j++){
+            c = [1,1,1,2,2,3,3,4,4,5];
+            card = {color: color, number: c[i]};
             CARDS.push(card);
         }
     }
 });
+HINTS = 9;
+LIVES = 3;
 
 var shuffle = function(array) {
     var m = array.length, t, i;
@@ -52,8 +55,8 @@ var GameSchema = new Schema({
     playerTurn: {type: Number, default:0},
     table: [Number],
     discard: [Number],
-    hints: {type: Number, default: 10},
-    lives: {type: Number, default: 3},
+    hints: {type: Number, default: HINTS},
+    lives: {type: Number, default: LIVES},
 });
 GameSchema.plugin(autoIncrement.plugin, {model: 'game', field: 'id'});
 
@@ -88,13 +91,16 @@ GameSchema.statics.startGame = function(players, cb){
  */
 GameSchema.methods.playerIndex = function(player){
     for(var p=0;p<this.players.length;p++){
-        if(this.players[p].name===player)break;
+        if(this.players[p].name.toLowerCase()===player.toLowerCase())break;
     }
     return p;
 }
 GameSchema.methods.whosTurn = function(){
     return this.players[this.playerTurn%this.players.length].name;
 }
+GameSchema.methods.hisTurn = function(player){
+    return this.whosTurn().toLowerCase()==player.toLowerCase();
+}   
 GameSchema.methods.tafel = function(){
     var t={};
     COLORS.forEach(function(color, b,c){t[color]=[]});
@@ -149,7 +155,7 @@ GameSchema.methods.otherPlayers = function(player){
     }
     r = [];
     this.players.forEach(function(p){
-        if(player!==p.name){
+        if(player.toLowerCase()!==p.name.toLowerCase()){
             p.cards = cards;
             p.hints = hints;
             r.push(p);
@@ -159,7 +165,7 @@ GameSchema.methods.otherPlayers = function(player){
 }
     
 GameSchema.methods.hint = function(player, for_player, hint, hint_value, cb){
-    if(this.whosTurn()!==player) return cb(new Error("not your turn"));
+    if(this.hisTurn(player)) return cb(new Error("not your turn"));
     
     var error=null;
     var save_cb=function(err){
@@ -185,7 +191,7 @@ GameSchema.methods.hint = function(player, for_player, hint, hint_value, cb){
     this.save(cb(error, updatedKnowledge));
 }
 GameSchema.methods.discard_card = function(name, index, cb){
-    if(this.whosTurn()!==name) return cb(new Error("not your turn"));
+    if(this.hisTurn(name)) return cb(new Error("not your turn"));
 
     var player = this.players[this.playerIndex(name)],
         card = player.hand[index];
@@ -195,7 +201,7 @@ GameSchema.methods.discard_card = function(name, index, cb){
                       colorKnown: false,
                       numberKnown: false});
     this.playerTurn++;
-    this.hints++;
+    if(this.hints<HINTS)this.hints++;
     this.save(function(err){
         if(err) throw err;
         console.log("card discarded for player " + name + " in game " + this.id);
@@ -210,7 +216,7 @@ GameSchema.methods.discard_card = function(name, index, cb){
     cb(null, knowledge);
 }
 GameSchema.methods.play_card = function(name, index, cb){
-    if(this.whosTurn()!==name) return cb(new Error("not your turn"));
+    if(this.hisTurn(name)) return cb(new Error("not your turn"));
 
     var player = this.players[this.playerIndex(name)],
         card = player.hand[index];
