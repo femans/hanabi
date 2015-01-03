@@ -56,7 +56,10 @@ var GameSchema = new Schema({
     burns: Number,
 });
 GameSchema.plugin(autoIncrement.plugin, {model: 'game', field: 'id'});
-// GameSchema static methods
+
+/*
+ * GameSchema static methods
+ */
 GameSchema.statics.startGame = function(players, cb){
     console.log("starting game with", players);
     var game = {
@@ -80,31 +83,44 @@ GameSchema.statics.startGame = function(players, cb){
     cb(new this(game));
 }
 
-// GameSchema model methods
+/*
+ * GameSchema model methods
+ */
+GameSchema.methods.playerIndex = function(player){
+    for(var p=0;p<this.players.length;p++){
+        if(this.players[p].name===player)break;
+    }
+    return p;
+}
 GameSchema.methods.whosTurn = function(){
     return this.players[this.playerTurn%this.players.length].name;
 }
 GameSchema.methods.tafel = function(){
     var t={};
     COLORS.forEach(function(color, b,c){t[color]=[]});
-    for(i=0;i<10;i++)this.table.push(this.stock.pop());
     this.table.forEach(function(number, b,c){
         t[CARDS[number].color].push(CARDS[number].number);
     });
     return t;
 }
 GameSchema.methods.yourHand = function(player){
-    var hand, r=[];
-    this.players.forEach(function(p){if(p.name===player)hand=p.hand});
-    hand.forEach(function(c){
-        var color = CARDS[c.n].color;
-        var number = CARDS[c.n].number;
+    var r=[];
+    this.players[this.playerIndex(player)].hand.forEach(function(card){
+        var color = CARDS[card.n].color;
+        var number = CARDS[card.n].number;
         r.push({
-            color:c.colorKnown?color:'white', 
-            number:c.numberKnown?number:'?'
+            color:card.colorKnown?color:'white', 
+            number:card.numberKnown?number:'?'
         });
     });
     return r;
+}
+GameSchema.methods.discardPile = function(){
+    r = [];
+    this.discard.forEach(function(card){
+        r.push(CARDS[card]);
+    });
+    return r.reverse();
 }
 GameSchema.methods.otherPlayers = function(player){
     cards = function(){
@@ -113,7 +129,21 @@ GameSchema.methods.otherPlayers = function(player){
             r.push({
                 color:CARDS[c.n].color,
                 number:CARDS[c.n].number,
+                colorKnown:c.colorKnown,
+                numberKnown:c.numberKnown,
             });
+        });
+        return r;
+    }
+    hints = function(){
+        var r={colors: [], numbers: []};
+        this.cards().forEach(function(card){
+            if (!card.colorKnown && r.colors.indexOf(card.color)<0){
+                r.colors.push(card.color);
+            }
+            if (!card.numberKnown && r.numbers.indexOf(card.number)<0){
+                r.numbers.push(card.number);
+            }
         });
         return r;
     }
@@ -121,12 +151,59 @@ GameSchema.methods.otherPlayers = function(player){
     this.players.forEach(function(p){
         if(player!==p.name){
             p.cards = cards;
+            p.hints = hints;
             r.push(p);
         }
     });
     return r;
 }
+    
+GameSchema.methods.hint = function(player, for_player, hint, hint_value, cb){
+    if(this.whosTurn()!==player) return cb(new Error("not your turn"));
+    
+    var error=null;
+    var save_cb=function(err){
+        if(err) error=err;
+        console.log("card updated for player "+for_player);
+    }
 
+    var updatedKnowledge = [];
+    this.players[this.playerIndex(for_player)].hand.forEach(function(card, i){
+        if(hint==='color' && CARDS[card.n].color===hint_value){
+            card.colorKnown = true;
+            updatedKnowledge.push({index:i, color:hint_value});
+            card.save(save_cb);
+        }else if(hint==='number' && CARDS[card.n].number==hint_value){
+            card.numberKnown = true;
+            updatedKnowledge.push({index:i, number:hint_value});
+            card.save(save_cb);
+        }
+    });
+    this.playerTurn++;
+    this.save(cb(error, updatedKnowledge));
+}
+GameSchema.methods.discard_card = function(name, index, cb){
+    if(this.whosTurn()!==name) return cb(new Error("not your turn"));
+
+    var player = this.players[this.playerIndex(name)],
+        card = player.hand[index];
+    this.discard.push(card.n);
+    card.remove();
+    player.hand.push({n: this.stock.pop(),
+                      colorKnown: false,
+                      numberKnown: false});
+    this.playerTurn++;
+    this.save(function(err){
+        if(err) throw err;
+        console.log("card discarded for player " + name + " in game " + this.id);
+    });
+    var knowledge={
+        stock: this.stock.length,
+        discard: this.discardPile(),
+        yourHand: this.yourHand(name),
+    };
+    cb(null, knowledge);
+}
 
 
 module.exports.Game = mongoose.model('game', GameSchema);

@@ -3,7 +3,7 @@ extends layout
 block content
   h1= 'Hanabi'
   div
-    form(action='/api/register' method='get')
+    form(action='/register' method='get')
       input(type='submit' value='register')
       label(for="user_id") as
       input(type="text" name="name" id="user_id")

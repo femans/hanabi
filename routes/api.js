@@ -4,36 +4,44 @@ var gamestate = require('../models');
 
 var router = express.Router();
 
-router.post('/startgame', function(req, res) {
-    req.db.Game.startGame(req.body.players.split(',').concat(req.body.name), function(game){
-        game.save(function(err){
-            if(err)console.error(err)
-            else console.log('game', game._id, 'saved successfully');
-        });
-        
-        res.render('arena', {player: req.body.name, game: game});
-    });
-});
-
-router.get('/register',
-        function(req, res) {
-            var name = url.parse(req.url, true).query.name;
-            req.db.Game.find({players: {$elemMatch: {name: name}}},
-                function(error, games){
-                    if(error) throw error;
-                    res.render('userpage', {name: name, games: games});
-                });
-        });
-
-router.post('/arena',
+router.post('/hint',
         function(req, res){
-            var player=req.body.player;
-            var game_id = req.body.game_id;
-            req.db.Game.find({id:game_id}, 
-                function(error, game){
-                    if(error) throw error;
-                    res.render('arena', {player: player, game: game[0]});
-                });
+            var player=req.body.player,
+                game_id=req.body.game,
+                hint=req.body.hint,
+                for_player=req.body.for_player,
+                hint_value=req.body.hint_value;
+            req.db.Game.findOne({id:game_id}, function(err, game){
+                if(err) throw err;
+                game.hint(player, for_player, hint, hint_value, 
+                    function(error, knowledge){
+                        res.setHeader("Content-Type", "application/json");
+                        if(error) {
+                            res.status(400);
+                            res.end(JSON.stringify({message: error.message}));
+                        }
+                        res.end(JSON.stringify({knowledge: {player: for_player, changes: knowledge}}));
+                    });
+            });
+        });
+
+router.post('/discard',
+        function(req, res){
+            var player=req.body.player,
+                game_id=req.body.game,
+                index=req.body.index;
+            req.db.Game.findOne({id:game_id}, function(err, game){
+                if(err) throw err;
+                game.discard_card(player, index,
+                    function(error, knowledge){
+                        res.setHeader("Content-Type", "application/json");
+                        if(error) {
+                            res.status(400);
+                            res.end(JSON.stringify({message: error.message}));
+                        }
+                        res.end(JSON.stringify({knowledge: knowledge}));
+                    });
+            });
         });
 
 module.exports = router;

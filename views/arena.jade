@@ -1,26 +1,69 @@
 extends layout
+block js
+  script(src="../javascripts/jquery-2.1.3.min.js")
+  script(src="../javascripts/arena.js")
 
 block content
   - var turn = game.whosTurn()
   - var whosTurn = turn==player?'your':turn+"'s"
-  h1= 'It is ' + whosTurn+' turn'
-  table
-    each numbers, color in game.tafel() 
-      tr
-        each number in numbers
-          td.card(style='background-color:'+color)= number
-  h3 your hand:
-  table
-    tr
-      each card in game.yourHand(player)
-        td.card(style='background-color:'+card.color)
-          p= card.number
+  h1= 'Welcome, ' + player
+  .error
+  h2= 'It is ' + whosTurn+' turn'
   
-  each otherPlayer in game.otherPlayers(player)
-    h3= otherPlayer.name + "'s hand"
+  .arena
+    .pile
+      p pile:
+      table
+        tr
+          td.card.stock <i>#{game.stock.length}</i>
+        if game.discard.length>0
+          td.card.discardpile(style='background-color:'+game.discardPile()[0].color)= game.discardPile()[0].number
+
+    .table
+      p table:
+      table
+        each numbers, color in game.tafel() 
+          tr
+            each number in numbers
+              td.card(style='background-color:'+color)= number
+
+  .yourHand.block(js_turn=(turn===player?"true":'false'), js_game=game.id, js_player=player)
+    h3 your hand:
     table
       tr
-        each card in otherPlayer.cards()
+        each card in game.yourHand(player)
           td.card(style='background-color:'+card.color)
             p= card.number
+        td.turn.card_options(style='display:none')
+          button.card_option.discard_card discard
+          button.card_option.play_card play
+        
+  
+  each otherPlayer in game.otherPlayers(player)
+    .player.block(js_player=otherPlayer.name)
+      h3= otherPlayer.name + "'s hand"
+      .playerCards
+        .cards
+          table
+            tr
+              each card in otherPlayer.cards()
+                td.card(style='background-color:'+card.color)
+                  p= card.number
+            tr
+              each card, i in otherPlayer.cards()
+                - var color=card.colorKnown?card.color:'black'
+                - var number=card.numberKnown?card.number:''
+                td
+                  .knowncard(js_function='known' style='color:'+color)
+                    div=number
+              td <- known
+
+        .hints.turn(style=(turn===player?'':'display: none'))
+          table
+            tr
+              td hint:
+              each color in otherPlayer.hints().colors
+                td.hintButton(js_game=game.id, js_player=player,js_hint='color', js_val=color, js_for=otherPlayer.name, style='background-color:'+color)
+              each number in otherPlayer.hints().numbers
+                td.hintButton(js_game=game.id, js_player=player, js_hint='number', js_val=number, js_for=otherPlayer.name)=number
 

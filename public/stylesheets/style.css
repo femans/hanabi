@@ -4,7 +4,6 @@ body {
 }
 
 div {
-    padding: 5px;
 }
 
 a {
@@ -16,6 +15,7 @@ label {
 }
 
 .card {
+    padding: 0px;
     width: 30px;
     height: 40px;
     border: 1px solid;
@@ -23,5 +23,39 @@ label {
     box-shadow: 10px 10px 10px #888888;
     text-align: center;
 }
+.knowncard {
+    border: 1px solid;
+    border-radius: 7px;
+    height: 40px;
+    text-align: center;
+}
+.knowncard div {
+    position: relative;
+    top: 29%;
+}
 
+.hintButton {
+    width: 20px;
+    height: 20px;
+    border: 1px solid;
+    text-align: center;
+}
 
+.error {
+    color: red;
+}
+
+.yourHand .selected {
+    border: 4px solid;
+}
+.card_option {
+    display: block;
+    border-radius: 5px;
+    margin: 5px;
+    border-top-color: lightgray;
+    border-left-color: lightgray;
+    border-bottom-color: rgb(202, 197, 197);
+    border-right-color: rgb(202, 197, 197);
+    box-shadow: 10px 10px 10px #888888;
+
+}

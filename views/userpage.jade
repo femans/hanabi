@@ -8,7 +8,7 @@ block content
     ul
       each game in games
         li 
-          form(action='/api/arena', method='post')
+          form(action='/arena', method='get')
             input(type='submit', id='game_'+game.id, value='game')
             input(type='hidden', name="player", value=name)
             input(type='hidden', name='game_id', value=game.id)
@@ -18,7 +18,7 @@ block content
             - var whosTurn = turn===name?'your':turn+"'s"
             label(for='game_'+game.id) with #{players} it is #{whosTurn} turn
       li
-        form(action='/api/startgame', method='post')
+        form(action='/startgame', method='post')
           input(type='submit', value='Start new game')
           label(for="players") with
           input(type="text" value="" name="players" id="players")
