@@ -7,7 +7,7 @@
 var mongoose=require('mongoose'),
     autoIncrement = require('mongoose-auto-increment');
 
-mongoose.connect('mongodb://localhost/hanabi');
+mongoose.connect(process.env.MONGOLAB_URI||'mongodb://localhost/hanabi');
 
 var connection = mongoose.connection;
 
