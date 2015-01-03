@@ -214,7 +214,7 @@ GameSchema.methods.discard_card = function(name, index, cb){
     cb(null, knowledge);
 }
 GameSchema.methods.play_card = function(name, index, cb){
-    if(this.hisTurn(name)) return cb(new Error("not your turn"));
+    if(!this.hisTurn(name)) return cb(new Error("not your turn"));
 
     var player = this.players[this.playerIndex(name)],
         card = player.hand[index];
