@@ -12,9 +12,10 @@ router.post('/startgame', function(req, res) {
         game.save(function(err){
             if(err)console.error(err)
             else console.log('game', game._id, 'saved successfully');
+            //redirect to arena
+            res.writeHead(302, {'Location': '/arena?player='+req.body.name+'&game_id='+game.id});
+            res.end();
         });
-        
-        res.render('arena', {player: req.body.name, game: game});
     });
 });
 
