@@ -1,7 +1,7 @@
 function success(data){
     $('.turn').hide();
     $('[js_turn]').attr('js_turn', false);
-    $().removeClass('selected');
+    $('.card').removeClass('selected');
 
     if(data.knowledge.changes){
         data.knowledge.changes.forEach(function(c){
@@ -19,7 +19,7 @@ function success(data){
     }            
     if(data.knowledge.discard){
         $('.yourHand .card').eq(data.knowledge.discarded).animate({width: 'toggle'}, 300, function(){
-            $('.discardpile').css({'background-color': data.knowledge.discard[0].color}).html(data.knowledge.discard[0].number);
+            $('.discardpile').css({'background-color': data.knowledge.discard[0].color}).find('div').html(data.knowledge.discard[0].number);
             $('.stock i').html(data.knowledge.stock);
         });
         $('<td class="card" style="display:none">?</td>').insertAfter($('.yourHand td').eq(-2)[0]).animate({width:'toggle'},300);

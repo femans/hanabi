@@ -33,6 +33,11 @@ label {
     position: relative;
     top: 29%;
 }
+.yourHand[js_turn="true"] td {
+    cursor: pointer;
+    cursor: hand;
+}
+
 
 .hintButton {
     width: 20px;
@@ -69,11 +74,7 @@ label {
     margin:auto;
     text-align:center;
 }
-.discardpile div {
-    position: relative;
-    top: 10px;
-}
-.stock div {
+.pile td div div {
     position: relative;
     top: 10px;
 }

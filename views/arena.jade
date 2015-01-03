@@ -26,7 +26,7 @@ block content
           td
             if game.discard.length>0
               .card.discardpile(style='background-color:'+game.discardPile()[0].color)
-                div= game.discardPile()[0].number
+                div=game.discardPile()[0].number
           td
             div=game.hints
           td
@@ -35,7 +35,6 @@ block content
             div=game.table.length
 
     .table
-      p table:
       table
         each numbers, color in game.tafel() 
           tr

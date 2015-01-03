@@ -215,7 +215,7 @@ GameSchema.methods.play_card = function(name, index, cb){
     var player = this.players[this.playerIndex(name)],
         card = player.hand[index];
 
-    if(CARDS[card.n].number==this.tafel[CARDS[card.n].color].length+1){
+    if(CARDS[card.n].number==this.tafel()[CARDS[card.n].color].length+1){
         this.table.push(card.n);
         if(CARDS[card.n].number==5){ 
             this.hints++;
