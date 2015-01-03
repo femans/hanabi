@@ -4,7 +4,9 @@ body {
   background-color: rgb(7, 23, 139);
   color: rgb(238, 169, 39);
 }
-
+.text {
+  color: rgb(238, 169, 39);
+}
 div {
 }
 
