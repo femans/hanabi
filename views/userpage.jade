@@ -14,7 +14,7 @@ block content
             input(type='hidden', name='game_id', value=game.id)
             - var players = '';
             - game.players.forEach(function(p, i, c){if(p.name.toLowerCase()!=name.toLowerCase())players += p.name+(i<c.length-2?', ':';')})
-            - var whosTurn = game.hisTurn(name)?'your':turn+"'s"
+            - var whosTurn = game.hisTurn(name)?'your':game.whosTurn()+"'s"
             label(for='game_'+game.id) with #{players} it is #{whosTurn} turn
       li
         form(action='/startgame', method='post')
