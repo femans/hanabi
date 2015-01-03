@@ -14,7 +14,8 @@ block content
             input(type='hidden', name='game_id', value=game.id)
             - var players = '';
             - game.players.forEach(function(p, i, c){if(p.name.toLowerCase()!=name.toLowerCase())players += p.name+(i<c.length-2?', ':';')})
-            - var whosTurn = game.hisTurn(name)?'your':game.whosTurn()+"'s"
+            - var whosTurn = game.hisTurn(name)?'it is your turn':'it is '+game.whosTurn()+"'s turn"
+            - var status = game.lives>0?whosTurn:'GAME OVER with ' + game.table.length + ' points'
             label(for='game_'+game.id) with #{players} it is #{whosTurn} turn
       li
         form(action='/startgame', method='post')

@@ -63,12 +63,12 @@ $(function(){
             function(e){
                 if($(e.target).closest('.card').hasClass('selected')){
                     $(e.target).closest('.card').removeClass('selected');
-                    $(e.target).closest('.yourHand').find('.card_options').hide();
+                    $(e.target).closest('.yourHand').find('.card_option').hide();
                 }
                 else {
                     $('.yourHand .card').removeClass('selected');
                     $(e.target).closest('.card').addClass('selected');
-                    $(e.target).closest('.yourHand').find('.card_options').show();
+                    $(e.target).closest('.yourHand').find('.card_option').show();
                 }
             });
 

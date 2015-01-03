@@ -1,19 +1,18 @@
 body {
-  padding: 50px;
+  padding-left: 5vw;
+  padding-right: 0%;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: rgb(7, 23, 139);
   color: rgb(238, 169, 39);
+  width: 90vw;
+  height: 90vh;
 }
 .text {
   color: rgb(238, 169, 39);
 }
-div {
-}
-
-a {
-  color: #00B7FF;
-}
-
 label {
     padding: 5px;
 }
@@ -43,12 +42,12 @@ label {
     cursor: hand;
 }
 
-
 .hintButton {
-    width: 20px;
-    height: 20px;
-    border: 1px solid;
+    width: 24px;
+    height: 24px;
+    border: 2px solid;
     text-align: center;
+    border-radius: 3px;
     cursor: pointer;
     cursor: hand;
 }
@@ -58,21 +57,38 @@ label {
 }
 
 .yourHand .selected {
-    border: 4px solid;
-    padding: 0px;
+    border: 2px solid;
+    border-color: black;
+    position:relative;
+    top:-20px;
+    padding: 2px;
 }
 .card_option {
     display: block;
     border-radius: 5px;
-    margin: 5px;
-    border-top-color: lightgray;
-    border-left-color: lightgray;
-    border-bottom-color: rgb(202, 197, 197);
-    border-right-color: rgb(202, 197, 197);
-    box-shadow: 10px 10px 10px #888888;
+    margin: 0px;
+    height: 48px;
+    box-shadow:10px 10px 10px rgb(146, 114, 54); 
     margin-bottom:0px;
     margin-top:0px;
-
+    text-align: center;
+    padding:6px;
+    position relative;
+}
+.card_option.play_card{
+    background-color: rgb(76, 223, 28);
+    border-top-style: hidden;
+    border-left-style: hidden;
+    border-bottom-color: rgb(202, 197, 197);
+    border-right-color: rgb(202, 197, 197);
+}
+.card_option.discard_card{
+    margin-left:6px;
+    background-color: rgb(254, 186, 107);
+    border-top-style: hidden;
+    border-left-style: hidden;
+    border-bottom-color: rgb(202, 197, 197);
+    border-right-color: rgb(202, 197, 197);
 }
 
 .stock {

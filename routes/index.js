@@ -4,6 +4,7 @@ var models = require('../models');
 var url = require('url');
 
 router.get('/', function(req, res) {
+    console.log(req.headers.userAgent);
     res.render('index');
 });
 

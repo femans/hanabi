@@ -58,9 +58,10 @@ block content
       tr
         each card in game.yourHand(player)
           td.card(style='background-color:'+card.color)= card.number
-        td.turn.card_options(style='display:none')
-          button.card_option.discard_card discard
-          button.card_option.play_card play
+        td.turn.card_options
+          button.card_option.discard_card(style='display:none') discard
+        td.turn.card_options
+          button.card_option.play_card(style='display:none') play
         
   
   each otherPlayer in game.otherPlayers(player)
@@ -85,7 +86,7 @@ block content
           .hints.turn(style=(game.hisTurn(player)?'':'display: none'))
             table
               tr
-                td hint:
+                td give #{otherPlayer.name} a hint:
                 each color in otherPlayer.hints().colors
                   td.hintButton(js_game=game.id, js_player=player,js_hint='color', js_val=color, js_for=otherPlayer.name, style='background-color:'+color)
                 each number in otherPlayer.hints().numbers
