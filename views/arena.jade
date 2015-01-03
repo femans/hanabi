@@ -1,4 +1,10 @@
 extends layout
+block meta
+  if game.whosTurn()==player
+    meta(js_refresh http-equiv="" content="5")
+  else
+    meta(http-equiv="refresh" content="5")
+
 block js
   script(src="../javascripts/jquery-2.1.3.min.js")
   script(src="../javascripts/arena.js")
@@ -8,17 +14,14 @@ block content
   - var whosTurn = turn==player?'your':turn+"'s"
   h1= 'Welcome, ' + player
   .error
-  h2.turn= 'It is ' + whosTurn+' turn'
+  if game.lives>0
+    h2.turn= 'It is ' + whosTurn+' turn'
+  else
+    h2 GAME OVER - #{game.table.length} points
   
   .arena
     .pile
       table
-        tr
-          th stock
-          th discard
-          th hints
-          th lives
-          th points
         tr
           td
             .card.stock 
@@ -32,16 +35,24 @@ block content
           td
             div=game.lives
           td 
-            div=game.table.length
+            div <b>#{game.table.length}</b>
+        tr
+          th stock
+          th discard
+          th hints
+          th lives
+          th points
 
-    .table
-      table
-        each numbers, color in game.tafel() 
-          tr
-            each number in numbers
-              td.card(style='background-color:'+color)= number
+    .pile.table
+      table  
+        tr
+          each numbers, color in game.tafel() 
+            td
+              each number in numbers
+                div.card(style='background-color:'+color)
+                  div= number
 
-  .yourHand(js_turn=(turn===player?"true":'false'), js_game=game.id, js_player=player)
+  .yourHand(js_turn=(turn===player&&game.lives>0?"true":'false'), js_game=game.id, js_player=player)
     h3 your hand:
     table
       tr
@@ -70,12 +81,13 @@ block content
                     div=number
               td <- known
 
-        .hints.turn(style=(turn===player?'':'display: none'))
-          table
-            tr
-              td hint:
-              each color in otherPlayer.hints().colors
-                td.hintButton(js_game=game.id, js_player=player,js_hint='color', js_val=color, js_for=otherPlayer.name, style='background-color:'+color)
-              each number in otherPlayer.hints().numbers
-                td.hintButton(js_game=game.id, js_player=player, js_hint='number', js_val=number, js_for=otherPlayer.name)=number
+        if game.hints>0 && game.lives>0
+          .hints.turn(style=(turn===player?'':'display: none'))
+            table
+              tr
+                td hint:
+                each color in otherPlayer.hints().colors
+                  td.hintButton(js_game=game.id, js_player=player,js_hint='color', js_val=color, js_for=otherPlayer.name, style='background-color:'+color)
+                each number in otherPlayer.hints().numbers
+                  td.hintButton(js_game=game.id, js_player=player, js_hint='number', js_val=number, js_for=otherPlayer.name)=number
 

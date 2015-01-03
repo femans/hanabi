@@ -1,6 +1,7 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background-color: antiquewhite;
 }
 
 div {
@@ -68,6 +69,23 @@ label {
     margin-bottom:0px;
     margin-top:0px;
 
+}
+
+.stock {
+    background-color: white;
+}
+
+.table {
+    height: 100px;
+}
+.table td {
+    width: 50px;
+}
+.table .card {
+    position: relative;
+    top: 50px;
+    margin-top: -40px;
+    margin-left: -30px;
 }
 
 .pile td div {

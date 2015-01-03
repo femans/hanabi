@@ -22,14 +22,23 @@ function success(data){
             $('.discardpile').css({'background-color': data.knowledge.discard[0].color}).find('div').html(data.knowledge.discard[0].number);
             $('.stock i').html(data.knowledge.stock);
         });
-        $('<td class="card" style="display:none">?</td>').insertAfter($('.yourHand td').eq(-2)[0]).animate({width:'toggle'},300);
+        $('<td class="card" style="display:none;background-color:white;">?</td>').insertAfter($('.yourHand td').eq(-2)[0]).animate({width:'toggle'},300);
     }
+    //TODO: update the arena after play_card function
+    //TODO: make pretty animations
+    //
     console.log(data);
+    // hackish; 
+    // TODO: make nice completely async frontend
+    $('[js_refresh]').attr('http-equiv', 'refresh');
+    
 }
 function error(err){
     $('.error').html(error.responseJSON.message);
     console.log(err);
 }
+
+$()
 
 $(function(){
     $('td.hintButton').click(
