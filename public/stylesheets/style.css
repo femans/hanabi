@@ -15,7 +15,7 @@ label {
 }
 
 .card {
-    padding: 0px;
+    padding: 3px;
     width: 30px;
     height: 40px;
     border: 1px solid;
@@ -39,6 +39,8 @@ label {
     height: 20px;
     border: 1px solid;
     text-align: center;
+    cursor: pointer;
+    cursor: hand;
 }
 
 .error {
@@ -47,6 +49,7 @@ label {
 
 .yourHand .selected {
     border: 4px solid;
+    padding: 0px;
 }
 .card_option {
     display: block;
@@ -57,5 +60,20 @@ label {
     border-bottom-color: rgb(202, 197, 197);
     border-right-color: rgb(202, 197, 197);
     box-shadow: 10px 10px 10px #888888;
+    margin-bottom:0px;
+    margin-top:0px;
 
+}
+
+.pile td div {
+    margin:auto;
+    text-align:center;
+}
+.discardpile div {
+    position: relative;
+    top: 10px;
+}
+.stock div {
+    position: relative;
+    top: 10px;
 }

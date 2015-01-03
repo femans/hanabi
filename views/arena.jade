@@ -8,16 +8,31 @@ block content
   - var whosTurn = turn==player?'your':turn+"'s"
   h1= 'Welcome, ' + player
   .error
-  h2= 'It is ' + whosTurn+' turn'
+  h2.turn= 'It is ' + whosTurn+' turn'
   
   .arena
     .pile
-      p pile:
       table
         tr
-          td.card.stock <i>#{game.stock.length}</i>
-        if game.discard.length>0
-          td.card.discardpile(style='background-color:'+game.discardPile()[0].color)= game.discardPile()[0].number
+          th stock
+          th discard
+          th hints
+          th lives
+          th points
+        tr
+          td
+            .card.stock 
+              div <i>#{game.stock.length}</i>
+          td
+            if game.discard.length>0
+              .card.discardpile(style='background-color:'+game.discardPile()[0].color)
+                div= game.discardPile()[0].number
+          td
+            div=game.hints
+          td
+            div=game.lives
+          td 
+            div=game.table.length
 
     .table
       p table:
@@ -27,28 +42,26 @@ block content
             each number in numbers
               td.card(style='background-color:'+color)= number
 
-  .yourHand.block(js_turn=(turn===player?"true":'false'), js_game=game.id, js_player=player)
+  .yourHand(js_turn=(turn===player?"true":'false'), js_game=game.id, js_player=player)
     h3 your hand:
     table
       tr
         each card in game.yourHand(player)
-          td.card(style='background-color:'+card.color)
-            p= card.number
+          td.card(style='background-color:'+card.color)= card.number
         td.turn.card_options(style='display:none')
           button.card_option.discard_card discard
           button.card_option.play_card play
         
   
   each otherPlayer in game.otherPlayers(player)
-    .player.block(js_player=otherPlayer.name)
+    .player(js_player=otherPlayer.name)
       h3= otherPlayer.name + "'s hand"
       .playerCards
         .cards
           table
             tr
               each card in otherPlayer.cards()
-                td.card(style='background-color:'+card.color)
-                  p= card.number
+                td.card(style='background-color:'+card.color)= card.number
             tr
               each card, i in otherPlayer.cards()
                 - var color=card.colorKnown?card.color:'black'

@@ -1,5 +1,6 @@
 function success(data){
     $('.turn').hide();
+    $('[js_turn]').attr('js_turn', false);
     $().removeClass('selected');
 
     if(data.knowledge.changes){
@@ -17,9 +18,11 @@ function success(data){
         });
     }            
     if(data.knowledge.discard){
-        $('.stock i').html(data.knowledge.stock);
-        $('.discardpile').css({'background-color': data.knowledge.discard[0].color})
-            .html(data.knowledge.discard[0].number);
+        $('.yourHand .card').eq(data.knowledge.discarded).animate({width: 'toggle'}, 300, function(){
+            $('.discardpile').css({'background-color': data.knowledge.discard[0].color}).html(data.knowledge.discard[0].number);
+            $('.stock i').html(data.knowledge.stock);
+        });
+        $('<td class="card" style="display:none">?</td>').insertAfter($('.yourHand td').eq(-2)[0]).animate({width:'toggle'},300);
     }
     console.log(data);
 }
@@ -62,10 +65,24 @@ $(function(){
 
     $('button.discard_card').click(
             function(e){
-                var index = $(e.target).closest('.yourHand').find('.selected').index();
                 $.ajax({
                     type: 'post',
                     url: '/api/discard', 
+                    data: {
+                        game:$(this).closest('.yourHand').attr('js_game'),
+                        player:$(this).closest('.yourHand').attr('js_player'),
+                        index:$(this).closest('.yourHand').find('.selected').index(),
+                    },
+                    success: success,
+                    error: error
+                });
+            });
+
+    $('button.play_card').click(
+            function(e){
+                $.ajax({
+                    type: 'post',
+                    url: '/api/play', 
                     data: {
                         game:$(this).closest('.yourHand').attr('js_game'),
                         player:$(this).closest('.yourHand').attr('js_player'),

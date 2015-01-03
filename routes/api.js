@@ -44,4 +44,23 @@ router.post('/discard',
             });
         });
 
+router.post('/play',
+        function(req, res){
+            var player=req.body.player,
+                game_id=req.body.game,
+                index=req.body.index;
+            req.db.Game.findOne({id:game_id}, function(err, game){
+                if(err) throw err;
+                game.play_card(player, index,
+                    function(error, knowledge){
+                        res.setHeader("Content-Type", "application/json");
+                        if(error) {
+                            res.status(400);
+                            res.end(JSON.stringify({message: error.message}));
+                        }
+                        res.end(JSON.stringify({knowledge: knowledge}));
+                    });
+            });
+        });
+
 module.exports = router;
