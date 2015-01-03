@@ -2,8 +2,9 @@ extends layout
 
 block content
   h1= 'Hanabi'
-  h2 https://github.com/xonnie/hanabi
-  p more text follows
+  p find the code repository here: 
+    a(href='https://github.com/xonnie/hanabi' style='color: black') https://github.com/xonnie/hanabi
+  h3 A card game for 2 to 5 players. 
   div
     form(action='/register' method='get')
       input(type='submit' value='register')
