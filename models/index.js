@@ -7,15 +7,13 @@ autoIncrement.initialize(mongoose.connection);
 COLORS = ['orange', 'violet', 'green', 'darkcyan', 'red'];
 CARDS = [];
 COLORS.forEach(function(color, b,c){
-    for(var i=1; i<=5; i++){
-        for(var j=0; j<10; j++){
-            c = [1,1,1,2,2,3,3,4,4,5];
-            card = {color: color, number: c[i]};
-            CARDS.push(card);
-        }
+    for(var j=0; j<10; j++){
+        c = [1,1,1,2,2,3,3,4,4,5];
+        card = {color: color, number: c[j]};
+        CARDS.push(card);
     }
 });
-HINTS = 9;
+HINTS = 10;
 LIVES = 3;
 
 var shuffle = function(array) {
@@ -91,7 +89,7 @@ GameSchema.statics.startGame = function(players, cb){
  */
 GameSchema.methods.playerIndex = function(player){
     for(var p=0;p<this.players.length;p++){
-        if(this.players[p].name.toLowerCase()===player.toLowerCase())break;
+        if(this.players[p].name.toLowerCase()==player.toLowerCase())break;
     }
     return p;
 }
@@ -165,7 +163,7 @@ GameSchema.methods.otherPlayers = function(player){
 }
     
 GameSchema.methods.hint = function(player, for_player, hint, hint_value, cb){
-    if(this.hisTurn(player)) return cb(new Error("not your turn"));
+    if(!this.hisTurn(player)) return cb(new Error("not your turn"));
     
     var error=null;
     var save_cb=function(err){

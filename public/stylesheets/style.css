@@ -1,7 +1,8 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
-  background-color: antiquewhite;
+  background-color: rgb(7, 23, 139);
+  color: rgb(238, 169, 39);
 }
 
 div {
@@ -21,8 +22,9 @@ label {
     height: 40px;
     border: 1px solid;
     border-radius: 7px;
-    box-shadow: 10px 10px 10px #888888;
+    box-shadow:10px 10px 10px rgb(146, 114, 54); 
     text-align: center;
+    color: black;
 }
 .knowncard {
     border: 1px solid;

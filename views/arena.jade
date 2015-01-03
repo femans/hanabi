@@ -52,7 +52,7 @@ block content
                 div.card(style='background-color:'+color)
                   div= number
 
-  .yourHand(js_turn=(turn===player&&game.lives>0?"true":'false'), js_game=game.id, js_player=player)
+  .yourHand(js_turn=(game.hisTurn(player)&&game.lives>0?"true":'false'), js_game=game.id, js_player=player)
     h3 your hand:
     table
       tr
@@ -82,7 +82,7 @@ block content
               td <- known
 
         if game.hints>0 && game.lives>0
-          .hints.turn(style=(turn===player?'':'display: none'))
+          .hints.turn(style=(game.hisTurn(player)?'':'display: none'))
             table
               tr
                 td hint:
