@@ -1,9 +1,11 @@
 Hanabi cardgame for 2-5 players
 ======
-gameplay stolen from a cardgame owned by my brother
+gameplay stolen from a cardgame owned by my brother; hope copyright holders will not be sad, but this game was never intended for any competitive use.
 this was a project to learn how to use node.js, mongodb. I am also learning a lot about frontend, which is not really my thing. 
 
 A lot can still be improved, but the game in its simplicity works.
+
+game runs here: https://hanabi-cardgame.herokuapp.com/
 
 it is built upon express.js framework. This was mainly useful for the project scaffold and router. 
 installation:
