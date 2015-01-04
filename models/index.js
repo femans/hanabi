@@ -103,7 +103,6 @@ GameSchema.methods.whosTurn = function(){
     return this.players[this.playerTurn%this.players.length].name;
 }
 GameSchema.methods.hisTurn = function(player){
-
     return this.lives>0&&this.stock.length>0&&this.whosTurn().toLowerCase()==player.toLowerCase();
 }   
 GameSchema.methods.tafel = function(){
