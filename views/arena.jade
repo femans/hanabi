@@ -55,7 +55,7 @@ block content
                 div.card(style='background-color:'+color)
                   div= number
 
-  .yourHand(js_turn=turn, js_game=game.id, js_player=player)
+  .yourHand(js_turn=turn?'true':'false', js_game=game.id, js_player=player)
     h3 your hand:
     table
       tr
