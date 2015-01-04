@@ -96,6 +96,7 @@ label {
 }
 
 .table {
+    margin-left: 30px;
     height: 100px;
 }
 .table td {
