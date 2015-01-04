@@ -2,12 +2,11 @@ extends layout
 
 block content
   h1= 'Hanabi'
-  p find the code repository here: 
-    a.text(href='https://github.com/xonnie/hanabi') https://github.com/xonnie/hanabi
   h3 A cooperative card game for 2 to 5 players. 
-  p you can register with any name without password, and start a game with anyone, also if they didn't register yet.
-  p rules are simple: try to reach a score as close to 25 as possible. But beware, if all lives are lost, you lose. 
-  p Each player can only see the cards of the other player(s). 
+  p find the code repository here: 
+    a.text(href='https://github.com/femans/hanabi') https://github.com/xonnie/hanabi
+  p You can register with any name without password, and start a game with anyone, also if they didn't register yet.
+  p Rules are simple: try to reach a score as close to 25 as possible by giving the right information. But beware, if all lives are lost, you lose. 
   div
     form(action='/register' method='get')
       input(type='submit' value='register')
