@@ -69,13 +69,14 @@ GameSchema.statics.startGame = function(players, cb){
         playerTurn: 0,
         table: [],
         discard: [],
-        hints: 10,
-        lives: 3
+        hints: HINTS,
+        lives: LIVES
     };
 
+    var cards_amount = players.length<4?5:4;
     players.forEach(function(p,b,c) {
-        player = {name: p.trim(), hand: [], id: b}
-        for (var i=5;i--;) player.hand.push({id: i,
+        var player = {name: p.trim(), hand: [], id: b}
+        for (var i=cards_amount;i--;) player.hand.push({id: i,
                                             n: game.stock.pop(),
                                             colorKnown: false,
                                             numberKnown: false});

@@ -30,8 +30,7 @@ router.post('/startgame', function(req, res) {
         }
     }
 
-    console.log(players);
-    if(players.length==0||players.length>5){
+    if(players.length==0||players.length>4){
         throw new Error('Incorrect number of players');
     }
     req.db.Game.startGame(players.concat(req.body.name), function(game){
