@@ -3,7 +3,7 @@ block meta
   if game.hisTurn(player)
     meta(js_refresh http-equiv="" content="5")
   else
-    if this.stock.length>0&&this.lives>0
+    if game.stock.length>0&&game.lives>0
       meta(http-equiv="refresh" content="5")
 
 block js
