@@ -101,5 +101,8 @@ $(function(){
                     error: error
                 });
             });
+    $('.discardpile').click(function(e){
+        $('.sidepanel').slideToggle();
+    });
 
 });

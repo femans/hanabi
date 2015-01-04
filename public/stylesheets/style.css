@@ -7,8 +7,8 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
   background-color: rgb(7, 23, 139);
   color: rgb(238, 169, 39);
-  width: 90vw;
-  height: 90vh;
+  max-width: 1000px;
+  height:100%;
 }
 .text {
   color: rgb(238, 169, 39);
@@ -116,4 +116,18 @@ label {
 .pile td div div {
     position: relative;
     top: 10px;
+}
+.sidepanel {
+    position: relative;
+    display: none;
+    margin-left:-60px;
+    width: 60px;
+    float: right;
+    z-index: -1;
+}
+.sidepanel .card {
+    position:relative;
+    top: 30px;
+    margin: 5px;
+    margin-top: -20px;
 }
