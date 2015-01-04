@@ -22,7 +22,6 @@ Things that need to be fixed:
   - end game, when last card is drawn each player gets one more turn
   - if stale position is reached before last card/turn, win game
   - 4 cards for game with 4 or 5 players
-  - see what is on discard pile
 
 - stupid things like:
   - you can't log in with a name that contains commas, I honestly don't know what happens if you do this. 
