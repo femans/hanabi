@@ -17,7 +17,7 @@ block content
   if game.lives>0
     h2.turn= 'It is ' + whosTurn+' turn'
   else
-    h2 GAME OVER - #{game.table.length} points
+    h2 GAME OVER - #{game.points()} points
   
   .arena
     .pile
@@ -35,7 +35,7 @@ block content
           td
             div=game.lives
           td 
-            div <b>#{game.table.length}</b>
+            div <b>#{game.points()}</b>
         tr
           th stock
           th discard

@@ -87,6 +87,12 @@ GameSchema.statics.startGame = function(players, cb){
 /*
  * GameSchema model methods
  */
+GameSchema.methods.points = function(){
+    var points = 0;
+    var t = this.tafel();
+    COLORS.forEach(function(color){points+=t[color].length});
+    return points;
+}
 GameSchema.methods.playerIndex = function(player){
     for(var p=0;p<this.players.length;p++){
         if(this.players[p].name.toLowerCase()==player.toLowerCase())break;
@@ -101,7 +107,7 @@ GameSchema.methods.hisTurn = function(player){
 }   
 GameSchema.methods.tafel = function(){
     var t={};
-    COLORS.forEach(function(color, b,c){t[color]=[]});
+    COLORS.forEach(function(color){t[color]=[]});
     this.table.forEach(function(number, b,c){
         t[CARDS[number].color].push(CARDS[number].number);
     });
@@ -207,7 +213,7 @@ GameSchema.methods.discard_card = function(name, index, cb){
     var knowledge={
         stock: this.stock.length,
         discard: this.discardPile(),
-        points: this.table.length,
+        points: this.points(),
         discarded: index,
         hints: this.hints,
     };
@@ -242,7 +248,7 @@ GameSchema.methods.play_card = function(name, index, cb){
         stock: this.stock.length,
         played: index,
         table: this.tafel(),
-        points: this.table.length,
+        points: this.points(),
         hints: this.hints,
         lives: this.lives,
     };
