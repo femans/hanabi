@@ -10,14 +10,17 @@ block js
   script(src="../javascripts/arena.js")
 
 block content
-  - var turn = game.whosTurn()
-  - var whosTurn = game.hisTurn(player)?'your':turn+"'s"
+  - var turn = game.hisTurn(player)&&game.lives>0&&game.stock.length>0
+  - var whosTurn = game.hisTurn(player)?'your':game.whosTurn()+"'s"
   h1= 'Welcome, ' + player
   .error
-  if game.lives>0
-    h2.turn= 'It is ' + whosTurn+' turn'
-  else
-    h2 GAME OVER - #{game.points()} points
+  if game.lives==0
+    h2 GAME OVER 
+  else 
+    if game.stock.length==0
+      h2 WIN! WIN! - #{game.points()} points
+    else  
+      h2.turn= 'It is ' + whosTurn+' turn'
   
   .arena
     .pile
@@ -52,7 +55,7 @@ block content
                 div.card(style='background-color:'+color)
                   div= number
 
-  .yourHand(js_turn=(game.hisTurn(player)&&game.lives>0?"true":'false'), js_game=game.id, js_player=player)
+  .yourHand(js_turn=turn, js_game=game.id, js_player=player)
     h3 your hand:
     table
       tr
@@ -83,7 +86,7 @@ block content
               td <- known
 
         if game.hints>0 && game.lives>0
-          .hints.turn(style=(game.hisTurn(player)?'':'display: none'))
+          .hints.turn(style=(turn?'':'display: none'))
             table
               tr
                 td give #{otherPlayer.name} a hint:
