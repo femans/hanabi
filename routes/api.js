@@ -1,5 +1,4 @@
 var express = require('express');
-var url = require('url');
 var gamestate = require('../models');
 
 var router = express.Router();
