@@ -115,12 +115,14 @@ io.on('connection', function(socket){
                 socket.emit('update', {
                     turn: game.whosTurn(),
                     players: [{name: player, known: game.knownHand(player)}],
+                    table: game.game_table(),
                     selectors: selectors
                 });
                 socket.broadcast.to(game_id).emit('update', {
                     turn: game.whosTurn(),
                     // the following could also be included as a bunch of selectors in stead:
                     players: [{name: player, hand: game.showHand(player), known: game.knownHand(player)}],
+                    table: game.game_table(),
                     selectors: selectors
                 });
             });

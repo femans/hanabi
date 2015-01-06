@@ -27,29 +27,39 @@ $(function(){
             $('.playerturn').html(gamestate.turn+'s');
             $('[js_turn]').attr('js_turn', 'false').change();
         }
-        gamestate.players.forEach(function(player){
-            var color_attr = player.name==PLAYER?'background-color':'color';
-            if(player.known) {
-                player.known.forEach(function(card, i){
-                    var j = $('[js_player="'+player.name+'"] [js_function="known"]:eq('+i+')');
-                    if(card.color){
-                        j.css(color_attr, card.color);    
-                    } else j.css(color_attr, player.name==PLAYER?'white':'black');
-                    if(card.number){
+        if(gamestate.players) {
+            gamestate.players.forEach(function(player){
+                var color_attr = player.name==PLAYER?'background-color':'color';
+                if(player.known) {
+                    player.known.forEach(function(card, i){
+                        var j = $('[js_player="'+player.name+'"] [js_function="known"]:eq('+i+')');
+                        if(card.color){
+                            j.css(color_attr, card.color);    
+                        } else j.css(color_attr, player.name==PLAYER?'white':'black');
+                        if(card.number){
+                            j.find('div').html(card.number);    
+                        } else j.find('div').html('?');
+                    });
+                }
+                if(player.hand) {
+                    player.hand.forEach(function(card, i){
+                        var j = $('[js_player="'+player.name+'"] .hand .card:eq('+i+')');
+                        j.css('background-color', card.color);    
                         j.find('div').html(card.number);    
-                    } else j.find('div').html('?');
-                });
+                    });
+                }
+            });
+        }
+        if(gamestate.table){
+            for(color in gamestate.table) {
+                if(gamestate.table[color].length > $('.colorclass.'+color+' .card').length) {
+                    $('.colorclass.'+color).append('<div class="card" style="background-color:'+color+'"><div>'+gamestate.table[color].length);
+                }
             }
-            if(player.hand) {
-                player.hand.forEach(function(card, i){
-                    var j = $('[js_player="'+player.name+'"] .hand .card:eq('+i+')');
-                    j.css('background-color', card.color);    
-                    j.find('div').html(card.number);    
-                });
-            }
-        });
+        }
+                
 
-       for(selector in gamestate.selectors){
+        for(selector in gamestate.selectors){
            var arg = gamestate.selectors[selector];
            console.log("selector:", selector, arg);
            if(typeof arg=='string'||typeof arg=='number'){
@@ -86,7 +96,7 @@ $(function(){
                 
     $('button.play_card').click(
             function(e){
-                socket.emit('play', {
+                SOCKET.emit('play', {
                 index: $(this).closest('.hand').find('.selected').index()
                 }, 
                 function(data){console.log(data)}

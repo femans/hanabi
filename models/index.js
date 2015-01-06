@@ -191,7 +191,7 @@ GameSchema.methods.otherPlayers = function(player){
 }
     
 GameSchema.methods.hint = function(player, for_player, hint, hint_value, cb){
-    if(!player || !for_player || !hint || !hint_value) return cv(new Error("wrong parameters"));
+    if(undefined==(player&&for_player&&hint&&hint_value)) return cv(new Error("wrong parameters"));
     if(!this.hisTurn(player)) return cb(new Error("not your turn"));
     if(this.hints==0) return cb(new Error("no more hints"));
 
@@ -208,7 +208,7 @@ GameSchema.methods.hint = function(player, for_player, hint, hint_value, cb){
     this.save(cb);
 }
 GameSchema.methods.discard_card = function(name, index, cb){
-    if(!name || !index) return cv(new Error("wrong parameters"));
+    if(undefined==(name&&index)) return cb(new Error("wrong parameters"));
     if(!this.hisTurn(name)) return cb(new Error("not your turn"));
 
     var player = this.players[this.playerIndex(name)],
@@ -225,7 +225,7 @@ GameSchema.methods.discard_card = function(name, index, cb){
     });
 }
 GameSchema.methods.play_card = function(name, index, cb){
-    if(!name || !index) return cv(new Error("wrong parameters"));
+    if(undefined==(name&&index)) return cb(new Error("wrong parameters"));
     if(!this.hisTurn(name)) return cb(new Error("not your turn"));
 
     var player = this.players[this.playerIndex(name)],

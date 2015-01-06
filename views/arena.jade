@@ -54,8 +54,8 @@ block content
         each numbers, color in game.game_table() 
           .colorclass(class=color)
             each number in numbers
-              div.card(style='background-color:'+color)
-                div= number
+              .card(style='background-color:'+color)
+                div=number
 
     .players
       .yourHand.player(js_turn=turn?'true':'false', js_game=game.id, js_player=player)
