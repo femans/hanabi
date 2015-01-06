@@ -19,7 +19,7 @@ var models = require('../models');
 
 var db = function(req, res, next){
     req.db = {
-        Game: models.Game,
+        Game: models,
     };
     return next();
 }

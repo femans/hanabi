@@ -170,30 +170,19 @@ GameSchema.methods.otherPlayers = function(player){
 }
     
 GameSchema.methods.hint = function(player, for_player, hint, hint_value, cb){
-    if(!this.hisTurn(player)) return cb(new Error("not your turn"));
+    if(!player || !for_player || !hint || !hint_value) return cv(new Error("Error: wrong parameters"));
+    if(!this.hisTurn(player)) return cb(new Error("Error: not your turn"));
     
-    var error=null;
-    var save_cb=function(err){
-        if(err) error=err;
-        console.log("card updated for player "+for_player);
-    }
-
-    var updatedKnowledge = [];
     this.players[this.playerIndex(for_player)].hand.forEach(function(card, i){
         if(hint==='color' && CARDS[card.n].color===hint_value){
             card.colorKnown = true;
-            updatedKnowledge.push({index:i, color:hint_value});
-            card.save(save_cb);
         }else if(hint==='number' && CARDS[card.n].number==hint_value){
             card.numberKnown = true;
-            updatedKnowledge.push({index:i, number:hint_value});
-            card.save(save_cb);
         }
     });
     this.playerTurn++;
     this.hints--;
-    //TODO: verbeter knowledge interface
-    this.save(cb(error, updatedKnowledge));
+    this.save(cb);
 }
 GameSchema.methods.discard_card = function(name, index, cb){
     if(!this.hisTurn(name)) return cb(new Error("not your turn"));
@@ -256,5 +245,5 @@ GameSchema.methods.play_card = function(name, index, cb){
     cb(null, knowledge);
 }
 
-module.exports.Game = mongoose.model('game', GameSchema);
+module.exports = mongoose.model('game', GameSchema);
 

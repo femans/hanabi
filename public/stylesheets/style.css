@@ -10,9 +10,13 @@ body {
   max-width: 1000px;
   height:100%;
 }
-.text {
+.link {
   color: rgb(238, 169, 39);
 }
+.link::after {
+  content: attr(href);
+}
+
 label {
     padding: 5px;
 }

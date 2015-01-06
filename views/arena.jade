@@ -1,10 +1,4 @@
 extends layout
-block meta
-  if game.hisTurn(player)
-    meta(js_refresh http-equiv="" content="5")
-  else
-    if game.stock.length>0&&game.lives>0
-      meta(http-equiv="refresh" content="5")
 
 block js
   script(src="../javascripts/jquery-2.1.3.min.js")
@@ -41,7 +35,7 @@ block content
                 .card.discardpile(style='background-color:'+game.discardPile()[0].color)
                   div=game.discardPile()[0].number
             td
-              div=game.hints
+              .hints=game.hints
             td
               div=game.lives
             td 
@@ -102,3 +96,6 @@ block content
                   each number in otherPlayer.hints().numbers
                     td.hintButton(js_game=game.id, js_player=player, js_hint='number', js_val=number, js_for=otherPlayer.name)=number
 
+  // open a socket:
+  script(src="/socket.io/socket.io.js")
+  script SOCKET = io();

@@ -38,24 +38,27 @@ function error(err){
     console.log(err);
 }
 
-$()
-
 $(function(){
+    SOCKET.on('message', console.log);
+    SOCKET.on('close', function(data){
+        SOCKET.disconnect();
+        console.log("closing socket; reason: ", data);
+    });
+    SOCKET.on('update', function(gamestate){
+        console.log(gamestate);
+        for(var field in gamestate){
+            $(field).html(gamestate[field]);
+        }
+    });
     $('td.hintButton').click(
         function(e){
-            $.ajax({
-                type: 'post',
-                url: '/api/hint',
-                data: {
-                    game: $(this).attr('js_game'),
-                    player: $(this).attr('js_player'),
+            SOCKET.emit('hint', {
                     hint: $(this).attr('js_hint'),
                     for_player: $(this).attr('js_for'),
                     hint_value: $(this).attr('js_val'),
-                },
-                success: success,    
-                error: error                  
-            });       
+            }, function(data){
+                console.log(data);
+            });
         }
     );
 
