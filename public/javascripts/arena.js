@@ -19,7 +19,8 @@ $(function(){
     });
     SOCKET.on('update', function(gamestate){
         console.log("Update received: ", gamestate);
-        if(gamestate.turn&&gamestate.turn==PLAYER){
+        if(gamestate.status) $('.status').html(gamestate.status);
+        if(gamestate.turn&&gamestate.turn.toLowerCase()==PLAYER.toLowerCase()){
             $('.playerturn').html('your');
             $('[js_turn]').attr('js_turn', 'true').change();
         }
@@ -29,13 +30,13 @@ $(function(){
         }
         if(gamestate.players) {
             gamestate.players.forEach(function(player){
-                var color_attr = player.name==PLAYER?'background-color':'color';
+                var color_attr = player.name.toLowerCase()==PLAYER.toLowerCase()?'background-color':'color';
                 if(player.known) {
                     player.known.forEach(function(card, i){
-                        var j = $('[js_player="'+player.name+'"] [js_function="known"]:eq('+i+')');
+                        var j = $('[js_player="'+player.name.toLowerCase()+'"] [js_function="known"]:eq('+i+')');
                         if(card.color){
                             j.css(color_attr, card.color);    
-                        } else j.css(color_attr, player.name==PLAYER?'white':'black');
+                        } else j.css(color_attr, player.name.toLowerCase()==PLAYER.toLowerCase()?'white':'dimgrey');
                         if(card.number){
                             j.find('div').html(card.number);    
                         } else j.find('div').html('?');
@@ -43,7 +44,7 @@ $(function(){
                 }
                 if(player.hand) {
                     player.hand.forEach(function(card, i){
-                        var j = $('[js_player="'+player.name+'"] .hand .card:eq('+i+')');
+                        var j = $('[js_player="'+player.name.toLowerCase()+'"] .hand .card:eq('+i+')');
                         j.css('background-color', card.color);    
                         j.find('div').html(card.number);    
                     });
@@ -61,7 +62,6 @@ $(function(){
 
         for(selector in gamestate.selectors){
            var arg = gamestate.selectors[selector];
-           console.log("selector:", selector, arg);
            if(typeof arg=='string'||typeof arg=='number'){
                $(selector).html(arg);
            }

@@ -55,6 +55,7 @@ var GameSchema = new Schema({
     discard: [Number],
     hints: {type: Number, default: HINTS},
     lives: {type: Number, default: LIVES},
+    last_turn: Number,
 });
 GameSchema.plugin(autoIncrement.plugin, {model: 'game', field: 'id'});
 
@@ -82,6 +83,7 @@ GameSchema.statics.startGame = function(players, cb){
                                             numberKnown: false});
         game.players.push(player);
     });
+    game.last_turn = players.length;
     cb(new this(game));
 }
 
@@ -100,11 +102,15 @@ GameSchema.methods.playerIndex = function(player){
     }
     return p;
 }
+GameSchema.methods.status = function(){
+    if(this.lives==0) return 'GAME OVER';
+    if(this.stock.length==0 && this.last_turn==0) return "WIN";
+}
 GameSchema.methods.whosTurn = function(){
     return this.players[this.playerTurn%this.players.length].name;
 }
 GameSchema.methods.hisTurn = function(player){
-    return this.lives>0&&this.stock.length>0&&this.whosTurn().toLowerCase()==player.toLowerCase();
+    return this.lives>0&&this.last_turn>0&&this.whosTurn().toLowerCase()==player.toLowerCase();
 }   
 GameSchema.methods.showHand = function(player) {
     r = [];
@@ -204,6 +210,7 @@ GameSchema.methods.hint = function(player, for_player, hint, hint_value, cb){
         }
     });
     this.playerTurn++;
+    if(this.stock.length==0) this.last_turn--;
     this.hints--;
     this.save(cb);
 }
@@ -219,6 +226,7 @@ GameSchema.methods.discard_card = function(name, index, cb){
                       colorKnown: false,
                       numberKnown: false});
     this.playerTurn++;
+    if(this.stock.length==0) this.last_turn--;
     if(this.hints<HINTS)this.hints++;
     this.save(function(err){
         cb(err);
@@ -246,6 +254,7 @@ GameSchema.methods.play_card = function(name, index, cb){
                       colorKnown: false,
                       numberKnown: false});
     this.playerTurn++;
+    if(this.stock.length==0) this.last_turn--;
     this.save(function(err){
         cb(err);
     });

@@ -171,6 +171,7 @@ label {
     width: 60px;
     float: right;
     z-index: -1;
+    top: 70px;
 }
 .sidepanel .card {
     position:relative;

@@ -5,60 +5,44 @@ block js
   script(src="../javascripts/arena.js")
 
 block content
-  - var turn = game.hisTurn(player)&&game.lives>0&&game.stock.length>0
-  - var whosTurn = game.hisTurn(player)?'your':game.whosTurn()+"'s"
   .header
     h1= 'Welcome, ' + player
     .error
-    if game.lives==0
-      h2 GAME OVER 
-    else 
-      if game.stock.length==0
-        h2 WIN! WIN! - #{game.points()} points
-      else  
-        h2 It is <span class="playerturn">#{whosTurn}</span> turn
+    h2.status It is <span class="playerturn"></span> turn
   
   .main
     .sidepanel
-      each card in game.discardPile()
-        .card(style='background-color:'+card.color)
-          div=card.number
+      //TODO: position this nicer
     .arena
       .pile
         .pile_place
           .card.stock 
-            .stocksize=game.stock.length
+            .stocksize
+              div
           .description stock
         .pile_place
-          if game.discard.length>0
-            .card.discardpile(style='background-color:'+game.discardPile()[0].color)
-              div=game.discardPile()[0].number
-            .description discard
-          else
             .card.discardpile
+              div
             .description discard
         .pile_place
           .card
-            .hints=game.hints
+            .hints
           .description hints 
         .pile_place
           .card
-            .lives=game.lives
+            .lives
           .description lives 
         .pile_place
           .card
-            .points=game.points()
+            .points
           .description points
 
       .table
-        each numbers, color in game.game_table() 
+        each color in COLORS
           .colorclass(class=color)
-            each number in numbers
-              .card(style='background-color:'+color)
-                div=number
 
     .players
-      .yourHand.player(js_turn=turn?'true':'false', js_game=game.id, js_player=player)
+      .yourHand.player(js_turn=turn?'true':'false', js_game=game.id, js_player=player.toLowerCase())
         h3 your hand:
         .hand
           each card in game.yourHand(player)
@@ -70,7 +54,7 @@ block content
             
       
       each otherPlayer in game.otherPlayers(player)
-        .player(js_player=otherPlayer.name)
+        .player(js_player=otherPlayer.name.toLowerCase())
           h3= otherPlayer.name + "'s hand"
           .playerCards
             .hand
@@ -78,7 +62,7 @@ block content
                 .cardholder
                   .card(style='background-color:'+card.color)
                     div= card.number
-                  - var color=card.colorKnown?card.color:'black'
+                  - var color=card.colorKnown?card.color:'dimgray'
                   - var number=card.numberKnown?card.number:'?'
                   .knowncard(js_function='known' style='color:'+color)
                     div=number
