@@ -21,19 +21,22 @@ label {
     padding: 5px;
 }
 
+[js_turn="true"] .controls {
+    visibility: visible;
+} 
+[js_turn="false"] .controls {
+    visibility: hidden;
+}
 .yourHand[js_turn="true"] .card {
     cursor: pointer;
     cursor: hand;
 }
 .hand .cardholder {
     display: inline-block
-    
 }
-
 .hand .card {
     display:inline-block;
 }
-
 .card {
     margin-left: -5px;
     padding: 3px;

@@ -106,6 +106,17 @@ GameSchema.methods.whosTurn = function(){
 GameSchema.methods.hisTurn = function(player){
     return this.lives>0&&this.stock.length>0&&this.whosTurn().toLowerCase()==player.toLowerCase();
 }   
+GameSchema.methods.knownHand = function(player) {
+    r = [];
+    this.players[this.playerIndex(player)].hand.forEach(function(card){
+        known={};
+        if (card.colorKnown) known['color']=CARDS[card.n].color;
+        if (card.numberKnown) known['number']=CARDS[card.n].number;
+        r.push(known);
+    });
+    return r;
+}
+
 GameSchema.methods.tafel = function(){
     var t={};
     COLORS.forEach(function(color){t[color]=[]});
@@ -170,8 +181,10 @@ GameSchema.methods.otherPlayers = function(player){
 }
     
 GameSchema.methods.hint = function(player, for_player, hint, hint_value, cb){
-    if(!player || !for_player || !hint || !hint_value) return cv(new Error("Error: wrong parameters"));
-    if(!this.hisTurn(player)) return cb(new Error("Error: not your turn"));
+    if(!player || !for_player || !hint || !hint_value) return cv(new Error("wrong parameters"));
+    if(!this.hisTurn(player)) return cb(new Error("not your turn"));
+    if(this.hints==0) return cb(new Error("no more hints"));
+
     
     this.players[this.playerIndex(for_player)].hand.forEach(function(card, i){
         if(hint==='color' && CARDS[card.n].color===hint_value){

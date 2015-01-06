@@ -39,15 +39,40 @@ function error(err){
 }
 
 $(function(){
-    SOCKET.on('message', console.log);
+    SOCKET.on('err', function(data){
+        console.log(data)});
     SOCKET.on('close', function(data){
         SOCKET.disconnect();
         console.log("closing socket; reason: ", data);
     });
     SOCKET.on('update', function(gamestate){
         console.log(gamestate);
+        if(gamestate.turn&&gamestate.turn==PLAYER){
+            $('.playerturn').html('your');
+            $('[js_turn]').attr('js_turn', 'true');
+        }
+        else {
+            $('.playerturn').html(gamestate.turn+'s');
+            $('[js_turn]').attr('js_turn', 'false');
+        }
+        gamestate.players.forEach(function(player){
+            console.log('player: ',player);
+            var color_attr = player.name==PLAYER?'background-color':'color';
+            player.hand.forEach(function(card, i){
+                var j = $('[js_player="'+player.name+'"] [js_function="known"]:eq('+i+')');
+                console.log(j);
+                    
+                if(card.color){
+                    j.css(color_attr, card.color);    
+                }
+                if(card.number){
+                    j.find('div').html(card.number);    
+                }
+            });
+        });
+
         for(var field in gamestate.selectors){
-            $(field).html(gamestate[field]);
+            $(field).html(gamestate.selectors[field]);
         }
     });
     $('td.hintButton').click(
@@ -62,14 +87,14 @@ $(function(){
         }
     );
 
-    $('.yourHand[js_turn="true"] .card').click(
+    $('[js_turn="true"] .selectable').click(
             function(e){
-                if($(e.target).closest('.card').hasClass('selected')){
-                    $(e.target).closest('.card').removeClass('selected');
+                if($(e.target).closest('.selectable').hasClass('selected')){
+                    $(e.target).closest('.selectable').removeClass('selected');
                 }
                 else {
-                    $('.yourHand .card').removeClass('selected');
-                    $(e.target).closest('.card').addClass('selected');
+                    $().removeClass('selected');
+                    $(e.target).closest('.selectable').addClass('selected');
                 }
             });
 

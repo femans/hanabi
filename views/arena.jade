@@ -16,7 +16,7 @@ block content
       if game.stock.length==0
         h2 WIN! WIN! - #{game.points()} points
       else  
-        h2.turn= 'It is ' + whosTurn+' turn'
+        h2 It is <span class="playerturn">#{whosTurn}</span> turn
   
   .main
     .sidepanel
@@ -61,9 +61,9 @@ block content
         h3 your hand:
         .hand
           each card in game.yourHand(player)
-            .card(style='background-color:'+card.color)
+            .card.selectable(js_function='known' style='background-color:'+card.color)
               div= card.number
-          .turn.card_options
+          .card_options.controls
             button.card_option.discard_card discard
             button.card_option.play_card play
             
@@ -83,8 +83,8 @@ block content
                     div=number
 
             if game.hints>0 && game.lives>0
-              .hints.turn(style=(turn?'':'display: none'))
-                table
+              div(js_turn=turn?'true':'false')
+                table.controls
                   tr
                     td hint:
                     each color in otherPlayer.hints().colors
@@ -95,3 +95,4 @@ block content
   // open a socket:
   script(src="/socket.io/socket.io.js")
   script SOCKET = io();
+  script PLAYER = '#{player}'

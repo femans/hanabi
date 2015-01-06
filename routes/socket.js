@@ -28,14 +28,14 @@ io.on('connection', function(socket){
             }
             game.hint(player, for_player, hint, hint_value, function(error, game){
                 if(error){
-                    log("something went wrong updating gamestate for hint", data.hint, data.hint_value, "for player", data.for_player);
-                    socket.send('error processing hint request');
+                    log("something went wrong updating gamestate for hint", data.hint, data.hint_value, "for player", data.for_playerx, ' - ', error);
+                    socket.emit('err', 'error processing hint request: '+error);
                     return;
                 }
                 fn("Hint sent!");
                 io.sockets.in(game_id).emit('update', {
                     turn: game.whosTurn(),
-                    players: game.players[game.playerIndex(for_player)],
+                    players: [{name: for_player, hand: game.knownHand(for_player)}],
                     selectors: {
                         '.hints': game.hints,
                     }
