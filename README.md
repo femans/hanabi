@@ -16,7 +16,7 @@ I tried to keep it simple so I made no user registration or model. Users only ex
 I built a socket, so there is direct response on all moves. The idea was to build a small framework that maps the updated models onto the client, so the frontend only has to know where to place the data, and wait for the data, while the backend produces the data. Node.js is explicitly practical for this because it is so easy to  create and ship json objects. 
 What I did was create a framework where the jquery handles, like css updates or div insertions, can be operated from the backend, through a single call.
 
-Things that need to be fixed:
+Things that could be improved:
   - better interface for login screens
   - maybe some better looking design or so
   - if stale position is reached before last card/turn, win game
