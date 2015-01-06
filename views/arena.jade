@@ -25,36 +25,37 @@ block content
           div=card.number
     .arena
       .pile
-        table
-          tr
-            td
-              .card.stock 
-                .stocksize=game.stock.length
-            td
-              if game.discard.length>0
-                .card.discardpile(style='background-color:'+game.discardPile()[0].color)
-                  div=game.discardPile()[0].number
-            td
-              .hints=game.hints
-            td
-              .lives=game.lives
-            td 
-              .points=game.points()
-          tr
-            th stock
-            th discard
-            th hints
-            th lives
-            th points
+        .pile_place
+          .card.stock 
+            .stocksize=game.stock.length
+          .description stock
+        .pile_place
+          if game.discard.length>0
+            .card.discardpile(style='background-color:'+game.discardPile()[0].color)
+              div=game.discardPile()[0].number
+            .description discard
+          else
+            .card.discardpile
+            .description discard
+        .pile_place
+          .card
+            .hints=game.hints
+          .description hints 
+        .pile_place
+          .card
+            .lives=game.lives
+          .description lives 
+        .pile_place
+          .card
+            .points=game.points()
+          .description points
 
-      .pile.table
-        table  
-          tr
-            each numbers, color in game.tafel() 
-              td
-                each number in numbers
-                  div.card(style='background-color:'+color)
-                    div= number
+      .table
+        each numbers, color in game.game_table() 
+          .colorclass(class=color)
+            each number in numbers
+              div.card(style='background-color:'+color)
+                div= number
 
     .players
       .yourHand.player(js_turn=turn?'true':'false', js_game=game.id, js_player=player)
