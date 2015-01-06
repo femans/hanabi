@@ -120,8 +120,26 @@ label {
 .error {
     color: red;
 }
+.pile .pile_place{
+    display: inline-block;
+    margin-left: 10px;
+    height: 65px;
+}
+.pile .description {
+    color: rgb(238, 169, 39);
+    text-align: center;
+    margin: -10px;
+    margin-top: 3px;
+}
+.pile .card {
+    margin-left: 0px;
+}
+.hints, .lives {
+    color: rgb(238, 169, 39);
+}
 .points {
     font-weight: bold;
+    color: rgb(238, 169, 39);
 }
 .stocksize {
     font-style: italic;
@@ -133,26 +151,18 @@ label {
 }
 
 .table {
-    margin-left: 30px;
     height: 100px;
-}
-.table td {
-    width: 50px;
 }
 .table .card {
     position: relative;
     top: 50px;
     margin-top: -40px;
-    margin-left: -30px;
+    margin-left: 10px;
 }
 
-.pile td div {
-    margin:auto;
-    text-align:center;
-}
-.pile td div div {
-    position: relative;
-    top: 10px;
+.colorclass {
+    display: inline-block;
+
 }
 .sidepanel {
     position: relative;
