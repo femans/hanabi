@@ -7,7 +7,6 @@ var bodyParser = require('body-parser');
 var middleware = require('./middleware');
 
 var routes = require('./routes');
-var api = require('./routes/api');
 var socket = require('./routes/socket');
 
 var app = express();
@@ -28,7 +27,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(middleware.db);
 
 app.use('/', routes);
-app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
