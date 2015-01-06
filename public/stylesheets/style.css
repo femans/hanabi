@@ -21,7 +21,21 @@ label {
     padding: 5px;
 }
 
+.yourHand[js_turn="true"] .card {
+    cursor: pointer;
+    cursor: hand;
+}
+.hand .cardholder {
+    display: inline-block
+    
+}
+
+.hand .card {
+    display:inline-block;
+}
+
 .card {
+    margin-left: -5px;
     padding: 3px;
     width: 30px;
     height: 40px;
@@ -30,6 +44,10 @@ label {
     box-shadow:10px 10px 10px rgb(146, 114, 54); 
     text-align: center;
     color: black;
+}
+.card div {
+    position:relative;
+    top:10px;
 }
 .knowncard {
     border: 1px solid;
@@ -41,25 +59,6 @@ label {
     position: relative;
     top: 29%;
 }
-.yourHand[js_turn="true"] td {
-    cursor: pointer;
-    cursor: hand;
-}
-
-.hintButton {
-    width: 24px;
-    height: 24px;
-    border: 2px solid;
-    text-align: center;
-    border-radius: 3px;
-    cursor: pointer;
-    cursor: hand;
-}
-
-.error {
-    color: red;
-}
-
 .yourHand .selected {
     border: 2px solid;
     border-color: black;
@@ -67,14 +66,19 @@ label {
     top:-20px;
     padding: 2px;
 }
+.card:not(.selected) ~ .card_options {
+    visibility: hidden;
+}
+.card.selected ~ .card_options {
+    visibility: visible;
+}
 .card_option {
-    display: block;
+    display:inline;
     border-radius: 5px;
-    margin: 0px;
-    height: 48px;
+    margin: 10px;
+    height: 28px;
+    width: 65px;
     box-shadow:10px 10px 10px rgb(146, 114, 54); 
-    margin-bottom:0px;
-    margin-top:0px;
     text-align: center;
     padding:6px;
     position relative;
@@ -94,6 +98,32 @@ label {
     border-bottom-color: rgb(202, 197, 197);
     border-right-color: rgb(202, 197, 197);
 }
+.player {
+    display: block;
+    margin: 10px;
+}
+
+
+.hintButton {
+    width: 24px;
+    height: 24px;
+    border: 2px solid;
+    text-align: center;
+    border-radius: 3px;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.error {
+    color: red;
+}
+.points {
+    font-weight: bold;
+}
+.stocksize {
+    font-style: italic;
+}
+
 
 .stock {
     background-color: white;

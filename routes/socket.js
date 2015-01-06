@@ -32,11 +32,13 @@ io.on('connection', function(socket){
                     socket.send('error processing hint request');
                     return;
                 }
-                fn("woot!");
+                fn("Hint sent!");
                 io.sockets.in(game_id).emit('update', {
-                    //turn: game.whosTurn(),
-                    '.hints': game.hints,
-                    //players: game.players[game.playerIndex(for_player)]
+                    turn: game.whosTurn(),
+                    players: game.players[game.playerIndex(for_player)],
+                    selectors: {
+                        '.hints': game.hints,
+                    }
                 });
             });
         });

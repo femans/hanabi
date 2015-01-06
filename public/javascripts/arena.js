@@ -46,7 +46,7 @@ $(function(){
     });
     SOCKET.on('update', function(gamestate){
         console.log(gamestate);
-        for(var field in gamestate){
+        for(var field in gamestate.selectors){
             $(field).html(gamestate[field]);
         }
     });
@@ -66,12 +66,10 @@ $(function(){
             function(e){
                 if($(e.target).closest('.card').hasClass('selected')){
                     $(e.target).closest('.card').removeClass('selected');
-                    $(e.target).closest('.yourHand').find('.card_option').hide();
                 }
                 else {
                     $('.yourHand .card').removeClass('selected');
                     $(e.target).closest('.card').addClass('selected');
-                    $(e.target).closest('.yourHand').find('.card_option').show();
                 }
             });
 

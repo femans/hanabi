@@ -29,7 +29,7 @@ block content
           tr
             td
               .card.stock 
-                div <i>#{game.stock.length}</i>
+                .stocksize=game.stock.length
             td
               if game.discard.length>0
                 .card.discardpile(style='background-color:'+game.discardPile()[0].color)
@@ -37,9 +37,9 @@ block content
             td
               .hints=game.hints
             td
-              div=game.lives
+              .lives=game.lives
             td 
-              div <b>#{game.points()}</b>
+              .points=game.points()
           tr
             th stock
             th discard
@@ -56,45 +56,41 @@ block content
                   div.card(style='background-color:'+color)
                     div= number
 
-    .yourHand(js_turn=turn?'true':'false', js_game=game.id, js_player=player)
-      h3 your hand:
-      table
-        tr
+    .players
+      .yourHand.player(js_turn=turn?'true':'false', js_game=game.id, js_player=player)
+        h3 your hand:
+        .hand
           each card in game.yourHand(player)
-            td.card(style='background-color:'+card.color)= card.number
-          td.turn.card_options
-            button.card_option.discard_card(style='display:none') discard
-          td.turn.card_options
-            button.card_option.play_card(style='display:none') play
-          
-    
-    each otherPlayer in game.otherPlayers(player)
-      .player(js_player=otherPlayer.name)
-        h3= otherPlayer.name + "'s hand"
-        .playerCards
-          .cards
-            table
-              tr
-                each card in otherPlayer.cards()
-                  td.card(style='background-color:'+card.color)= card.number
-              tr
-                each card, i in otherPlayer.cards()
+            .card(style='background-color:'+card.color)
+              div= card.number
+          .turn.card_options
+            button.card_option.discard_card discard
+            button.card_option.play_card play
+            
+      
+      each otherPlayer in game.otherPlayers(player)
+        .player(js_player=otherPlayer.name)
+          h3= otherPlayer.name + "'s hand"
+          .playerCards
+            .hand
+              each card in otherPlayer.cards()
+                .cardholder
+                  .card(style='background-color:'+card.color)
+                    div= card.number
                   - var color=card.colorKnown?card.color:'black'
-                  - var number=card.numberKnown?card.number:''
-                  td
-                    .knowncard(js_function='known' style='color:'+color)
-                      div=number
-                td <- known
+                  - var number=card.numberKnown?card.number:'?'
+                  .knowncard(js_function='known' style='color:'+color)
+                    div=number
 
-          if game.hints>0 && game.lives>0
-            .hints.turn(style=(turn?'':'display: none'))
-              table
-                tr
-                  td hint:
-                  each color in otherPlayer.hints().colors
-                    td.hintButton(js_game=game.id, js_player=player,js_hint='color', js_val=color, js_for=otherPlayer.name, style='background-color:'+color)
-                  each number in otherPlayer.hints().numbers
-                    td.hintButton(js_game=game.id, js_player=player, js_hint='number', js_val=number, js_for=otherPlayer.name)=number
+            if game.hints>0 && game.lives>0
+              .hints.turn(style=(turn?'':'display: none'))
+                table
+                  tr
+                    td hint:
+                    each color in otherPlayer.hints().colors
+                      td.hintButton(js_game=game.id, js_player=player,js_hint='color', js_val=color, js_for=otherPlayer.name, style='background-color:'+color)
+                    each number in otherPlayer.hints().numbers
+                      td.hintButton(js_game=game.id, js_player=player, js_hint='number', js_val=number, js_for=otherPlayer.name)=number
 
   // open a socket:
   script(src="/socket.io/socket.io.js")
