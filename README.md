@@ -24,5 +24,7 @@ Things that could be improved:
   - errors in registration decent handling; now it just throws server error :)
   - complete async; no prerendering of the content.
   - improve correlation between frontend and backend.
+Bugs:
+  - when reloading the page, only 1 card is on visible the table for each color, even if there are more according to gamestate.
   - more bugs? 
 
