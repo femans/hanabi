@@ -7,6 +7,13 @@ block content
     a.link(href='https://github.com/femans/hanabi')
     p You can register with any name without password, and start a game with anyone, even if they didn't register yet.
   p Rules are simple: try to reach a score as close to 25 as possible by giving the right information. But beware, if all lives are lost, you lose. 
+  p You don´t know your own cards, you only know the cards of the other player(s). You can exchange information about the cards in eachothers hands in your turn.
+  p each turn, you can choose to 
+    ol
+      li play a card: aim to add a card on top of one of the colors on the table, starting at 1 running up to 5. If you play a card that does not fit, you lose a life.
+      li discard a card; you get a hint chip back
+      li give a hint to another player, color or number; you lose a hint chip. 
+
   div
     form(action='/register' method='get')
       input(type='submit' value='register')

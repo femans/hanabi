@@ -26,5 +26,7 @@ Things that could be improved:
   - improve correlation between frontend and backend.
 Bugs:
   - when reloading the page, only 1 card is on visible the table for each color, even if there are more according to gamestate.
+  - hand of other player does not get updated when they make a move
+  - hint options dont get updated
   - more bugs? 
 
