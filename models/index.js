@@ -169,35 +169,9 @@ GameSchema.methods.discardPile = function(){
     return r.reverse();
 }
 GameSchema.methods.otherPlayers = function(player){
-    cards = function(){
-        var r=[];
-        this.hand.forEach(function(c){
-            r.push({
-                color:CARDS[c.n].color,
-                number:CARDS[c.n].number,
-                colorKnown:c.colorKnown,
-                numberKnown:c.numberKnown,
-            });
-        });
-        return r;
-    }
-    hints = function(){
-        var r={colors: [], numbers: []};
-        this.cards().forEach(function(card){
-            if (!card.colorKnown && r.colors.indexOf(card.color)<0){
-                r.colors.push(card.color);
-            }
-            if (!card.numberKnown && r.numbers.indexOf(card.number)<0){
-                r.numbers.push(card.number);
-            }
-        });
-        return r;
-    }
     var r = [];
     this.players.forEach(function(p){
         if(player.toLowerCase()!==p.name.toLowerCase()){
-            p.cards = cards;
-            p.hints = hints;
             r.push(p);
         }
     });
@@ -266,7 +240,7 @@ GameSchema.methods.play_card = function(name, index, cb){
         cb(err);
     });
 }
-GameSchema.methods.gamestate = function(){
+GameSchema.methods.gamestate = function(player){
     var discardpile = this.discardPile();
     var sidepanel = '';
     for(var i=0;i<discardpile.length;i++){
@@ -292,27 +266,31 @@ GameSchema.methods.gamestate = function(){
         }
     var game = this;
     this.players.forEach(function(p){
-        r.players.push({
-            name: p.name,
-//                hand: game.showHand(p),
-            known: game.knownHand(p),
-        });
-
+        if(player && p.name.toLowerCase()!=player.toLowerCase())
+            r.players.push({
+                name: p.name,
+                hand: game.showHand(p),
+                known: game.knownHand(p),
+            })
+        else
+            r.players.push({
+                name: p.name,
+                known: game.knownHand(p),
+            });
         // add to the selectors the correct show/hide for the hint buttons
         // avoiding nested loop by first adding all as hide, and then seeing which ones need to show
-        // atm the number 300 doesnt do much
         // TODO: do something similar for knownHand; 
         [1,2,3,4,5].forEach(function(number){
-            r.selectors['[js_player="'+p.name+'"] [js_hint="number"][js_val="'+number+'"]'] = {'hide': 300};
+            r.selectors['[js_player="'+p.name+'"] [js_hint="number"][js_val="'+number+'"]'] = {'hide': 0};
         });
         COLORS.forEach(function(color){
-            r.selectors['[js_player="'+p.name+'"] [js_hint="color"][js_val="'+color+'"]'] = {'hide': 300};
+            r.selectors['[js_player="'+p.name+'"] [js_hint="color"][js_val="'+color+'"]'] = {'hide': 0};
         });
         p.hand.forEach(function(card){
             if(!card.numberKnown) 
-                r.selectors['[js_player="'+p.name+'"] [js_hint="number"][js_val="'+CARDS[card.n].number+'"]'] = {'show': 300};
+                r.selectors['[js_player="'+p.name+'"] [js_hint="number"][js_val="'+CARDS[card.n].number+'"]'] = {'show': 0};
             if(!card.colorKnown) 
-                r.selectors['[js_player="'+p.name+'"] [js_hint="color"][js_val="'+CARDS[card.n].color+'"]'] = {'show': 300};
+                r.selectors['[js_player="'+p.name+'"] [js_hint="color"][js_val="'+CARDS[card.n].color+'"]'] = {'show': 0};
         });
     });
     return r;

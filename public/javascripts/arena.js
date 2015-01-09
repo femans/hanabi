@@ -50,17 +50,6 @@ $(function(){
                         j.find('div').html(card.number);    
                     });
                 }
-                if(player.hints) {
-                    console.log("hints", player.hints);
-                    console.log($('[js_player="'+player.name+'"] .hintButton'));
-                    $('[js_player="'+player.name+'"] .hintButton').each(function(i, button){
-                        if(player.hints.indexOf($(button).attr('js_val'))>=0)
-                            $(button).show()
-                        else
-                            $(button).hide();
-
-                    });
-                }
             });
         }
         if(gamestate.table){

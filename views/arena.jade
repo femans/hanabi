@@ -42,12 +42,12 @@ block content
           .colorclass(class=color)
 
     .players
-      .yourHand.player(js_turn=turn?'true':'false', js_game=game.id, js_player=player.toLowerCase())
+      .yourHand.player(js_turn, js_player=player.toLowerCase())
         h3 your hand:
         .hand
           each card in game.yourHand(player)
-            .card.selectable(js_function='known' style='background-color:'+card.color)
-              div= card.number
+            .card.selectable(js_function='known')
+              div
           .card_options.controls
             button.card_option.discard_card discard
             button.card_option.play_card play
@@ -58,14 +58,12 @@ block content
           h3= otherPlayer.name + "'s hand"
           .playerCards
             .hand
-              each card in otherPlayer.cards()
+              each card in otherPlayer.hand
                 .cardholder
-                  .card(style='background-color:'+card.color)
-                    div= card.number
-                  - var color=card.colorKnown?card.color:'dimgray'
-                  - var number=card.numberKnown?card.number:'?'
-                  .knowncard(js_function='known' style='color:'+color)
-                    div=number
+                  .card
+                    div
+                  .knowncard(js_function='known')
+                    div
 
             div(js_turn='false')
               table.controls

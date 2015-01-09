@@ -21,7 +21,8 @@ io.on('connection', function(socket){
             socket.emit("close", "game does not exist");
             return;
         }
-        socket.emit('update', game.gamestate());
+        //send the gamestate to the user
+        socket.emit('update', game.gamestate(player));
     });
 
     socket.on('hint', function(data, fn){
