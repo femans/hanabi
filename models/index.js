@@ -86,7 +86,10 @@ GameSchema.statics.startGame = function(players, cb){
     game.last_turn = players.length;
     cb(new this(game));
 }
-
+// because last_turn was added later
+GameSchema.post('init', function(game){
+    if(!game.last_turn) game.last_turn=game.players.length;
+});
 /*
  * GameSchema model methods
  */
@@ -113,8 +116,11 @@ GameSchema.methods.hisTurn = function(player){
     return this.lives>0&&this.last_turn>0&&this.whosTurn().toLowerCase()==player.toLowerCase();
 }   
 GameSchema.methods.showHand = function(player) {
-    r = [];
-    this.players[this.playerIndex(player)].hand.forEach(function(card){
+    var p = typeof player == 'string' 
+            ? this.players[this.playerIndex(player)] 
+            : player;
+    var r = [];
+    p.hand.forEach(function(card){
         r.push({
             color: CARDS[card.n].color,
             number: CARDS[card.n].number
@@ -123,8 +129,11 @@ GameSchema.methods.showHand = function(player) {
     return r;
 }
 GameSchema.methods.knownHand = function(player) {
-    r = [];
-    this.players[this.playerIndex(player)].hand.forEach(function(card){
+    var p = typeof player == 'string' 
+            ? this.players[this.playerIndex(player)] 
+            : player;
+    var r = [];
+    p.hand.forEach(function(card){
         known={};
         if (card.colorKnown) known['color']=CARDS[card.n].color;
         if (card.numberKnown) known['number']=CARDS[card.n].number;
@@ -132,7 +141,6 @@ GameSchema.methods.knownHand = function(player) {
     });
     return r;
 }
-
 GameSchema.methods.game_table = function(){
     var t={};
     COLORS.forEach(function(color){t[color]=[]});
@@ -154,7 +162,7 @@ GameSchema.methods.yourHand = function(player){
     return r;
 }
 GameSchema.methods.discardPile = function(){
-    r = [];
+    var r = [];
     this.discard.forEach(function(card){
         r.push(CARDS[card]);
     });
@@ -185,7 +193,7 @@ GameSchema.methods.otherPlayers = function(player){
         });
         return r;
     }
-    r = [];
+    var r = [];
     this.players.forEach(function(p){
         if(player.toLowerCase()!==p.name.toLowerCase()){
             p.cards = cards;
@@ -195,7 +203,6 @@ GameSchema.methods.otherPlayers = function(player){
     });
     return r;
 }
-    
 GameSchema.methods.hint = function(player, for_player, hint, hint_value, cb){
     if(undefined==(player&&for_player&&hint&&hint_value)) return cv(new Error("wrong parameters"));
     if(!this.hisTurn(player)) return cb(new Error("not your turn"));
@@ -258,6 +265,57 @@ GameSchema.methods.play_card = function(name, index, cb){
     this.save(function(err){
         cb(err);
     });
+}
+GameSchema.methods.gamestate = function(){
+    var discardpile = this.discardPile();
+    var sidepanel = '';
+    for(var i=0;i<discardpile.length;i++){
+        //TODO: this could very well be replaced by a jade template. That would be prettier than in code html formation.
+        sidepanel += '<div class="card" style="background-color:'+discardpile[i].color+'"><div>'+discardpile[i].number+'</div></div>';
+    }
+
+    var r = {
+            status: this.status(),
+            turn: this.whosTurn(),
+            selectors: {
+                '.selected': {'removeClass': 'selected'},
+                '.hints': this.hints,
+                '.stocksize': this.stock.length,
+                '.lives': this.lives,
+                '.points': this.points(),
+                '.sidepanel': sidepanel,
+                '.discardpile': {'css': {'background-color': discardpile.length?discardpile[0].color:'none'}},
+                '.discardpile div': discardpile.length?discardpile[0].number:'',
+            },
+            table: this.game_table(),
+            players: [],
+        }
+    var game = this;
+    this.players.forEach(function(p){
+        r.players.push({
+            name: p.name,
+//                hand: game.showHand(p),
+            known: game.knownHand(p),
+        });
+
+        // add to the selectors the correct show/hide for the hint buttons
+        // avoiding nested loop by first adding all as hide, and then seeing which ones need to show
+        // atm the number 300 doesnt do much
+        // TODO: do something similar for knownHand; 
+        [1,2,3,4,5].forEach(function(number){
+            r.selectors['[js_player="'+p.name+'"] [js_hint="number"][js_val="'+number+'"]'] = {'hide': 300};
+        });
+        COLORS.forEach(function(color){
+            r.selectors['[js_player="'+p.name+'"] [js_hint="color"][js_val="'+color+'"]'] = {'hide': 300};
+        });
+        p.hand.forEach(function(card){
+            if(!card.numberKnown) 
+                r.selectors['[js_player="'+p.name+'"] [js_hint="number"][js_val="'+CARDS[card.n].number+'"]'] = {'show': 300};
+            if(!card.colorKnown) 
+                r.selectors['[js_player="'+p.name+'"] [js_hint="color"][js_val="'+CARDS[card.n].color+'"]'] = {'show': 300};
+        });
+    });
+    return r;
 }
 
 module.exports = mongoose.model('game', GameSchema);

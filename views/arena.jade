@@ -67,15 +67,16 @@ block content
                   .knowncard(js_function='known' style='color:'+color)
                     div=number
 
-            if game.hints>0 && game.lives>0
-              div(js_turn=turn?'true':'false')
-                table.controls
-                  tr
-                    td hint:
-                    each color in otherPlayer.hints().colors
-                      td.hintButton(js_game=game.id, js_player=player,js_hint='color', js_val=color, js_for=otherPlayer.name, style='background-color:'+color)
-                    each number in otherPlayer.hints().numbers
-                      td.hintButton(js_game=game.id, js_player=player, js_hint='number', js_val=number, js_for=otherPlayer.name)=number
+            div(js_turn='false')
+              table.controls
+                tr
+                  td hint:
+                  each color in COLORS
+                    td.hintButton(js_hint='color', js_val=color, style="background-color:"+color+"; display: none")
+                tr
+                  td
+                  each number in [1,2,3,4,5]
+                    td.hintButton(js_hint='number', js_val=number, style="display: none")=number
 
   // open a socket:
   script(src="/socket.io/socket.io.js")

@@ -20,14 +20,15 @@ $(function(){
     SOCKET.on('update', function(gamestate){
         console.log("Update received: ", gamestate);
         if(gamestate.status) $('.status').html(gamestate.status);
-        if(gamestate.turn&&gamestate.turn.toLowerCase()==PLAYER.toLowerCase()){
-            $('.playerturn').html('your');
-            $('[js_turn]').attr('js_turn', 'true').change();
-        }
-        else {
-            $('.playerturn').html(gamestate.turn+'s');
-            $('[js_turn]').attr('js_turn', 'false').change();
-        }
+        if(gamestate.turn)
+            if(gamestate.turn.toLowerCase()==PLAYER.toLowerCase()){
+                $('.playerturn').html('your');
+                $('[js_turn]').attr('js_turn', 'true').change();
+            }
+            else {
+                $('.playerturn').html(gamestate.turn+'s');
+                $('[js_turn]').attr('js_turn', 'false').change();
+            }
         if(gamestate.players) {
             gamestate.players.forEach(function(player){
                 var color_attr = player.name.toLowerCase()==PLAYER.toLowerCase()?'background-color':'color';
@@ -49,12 +50,23 @@ $(function(){
                         j.find('div').html(card.number);    
                     });
                 }
+                if(player.hints) {
+                    console.log("hints", player.hints);
+                    console.log($('[js_player="'+player.name+'"] .hintButton'));
+                    $('[js_player="'+player.name+'"] .hintButton').each(function(i, button){
+                        if(player.hints.indexOf($(button).attr('js_val'))>=0)
+                            $(button).show()
+                        else
+                            $(button).hide();
+
+                    });
+                }
             });
         }
         if(gamestate.table){
             for(color in gamestate.table) {
-                if(gamestate.table[color].length > $('.colorclass.'+color+' .card').length) {
-                    $('.colorclass.'+color).append('<div class="card" style="background-color:'+color+'"><div>'+gamestate.table[color].length);
+                while(gamestate.table[color].length > $('.colorclass.'+color+' .card').length) {
+                    $('.colorclass.'+color).append('<div class="card" style="background-color:'+color+'"><div>'+($('.colorclass.'+color+' .card').length+1));
                 }
             }
         }
@@ -76,7 +88,7 @@ $(function(){
         function(e){
             SOCKET.emit('hint', {
                     hint: $(this).attr('js_hint'),
-                    for_player: $(this).attr('js_for'),
+                    for_player: $(this).closest('.player').attr('js_player'),
                     hint_value: $(this).attr('js_val'),
                 }, 
                 function(data){console.log(data)}
