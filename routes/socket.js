@@ -59,7 +59,7 @@ io.on('connection', function(socket){
             }
             game.discard_card(player, index, function(error, gamestate){
                 if(error){
-                    log("something went wrong updating gamestate for discard_card", player, index, ' - ', error);
+                    log("something went wrong updating gamestate for discard_card:_2_ for player _1_: _3_"._(player, index, error));
                     socket.emit('err', 'error processing discard_card: '+error);
                     return;
                 }
@@ -82,7 +82,7 @@ io.on('connection', function(socket){
             }
             game.play_card(player, index, function(error, gamestate){
                 if(error){
-                    log("something went wrong updating gamestate for play_card", player, index, ' - ', error);
+                    log("something went wrong updating gamestate for play:_2_ for player _1_: _3_"._(player, index, error));
                     socket.emit('err', 'error processing play_card request: '+error);
                     return;
                 }

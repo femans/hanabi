@@ -15,7 +15,7 @@ block content
             - var players = '';
             - game.players.forEach(function(p, i, c){if(p.name.toLowerCase()!=name.toLowerCase())players += p.name+(i<c.length-2?', ':';')})
             - var whosTurn = game.hisTurn(name)?'it is your turn':'it is '+game.whosTurn()+"'s turn"
-            - var status = game.lives==0?'GAME OVER with ' + game.points() + ' points':game.stock.length==0?'WIN with ' + game.points() + ' points':whosTurn;
+            - var status = game.lives==0?'GAME OVER':game.stock.length==0?'WIN with ' + game.points() + ' points':whosTurn;
             label(for='game_'+game.id) with #{players} #{status}
       li
         form(action='/startgame', method='post')

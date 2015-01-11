@@ -38,7 +38,7 @@ router.post('/startgame', function(req, res) {
             if(err)console.error(err)
             else console.log('game', game._id, 'saved successfully');
             //redirect to arena
-            res.writeHead(302, {'Location': '/arena?player='+req.body.name+'&game_id='+game.id});
+            res.writeHead(302, {'Location': '/arena?player=_&game/_id=_'._(req.body.name, game.id)});
             res.end();
         });
     });
