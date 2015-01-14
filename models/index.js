@@ -281,16 +281,16 @@ GameSchema.methods.gamestate = function(player){
         // avoiding nested loop by first adding all as hide, and then seeing which ones need to show
         // TODO: do something similar for knownHand; 
         [1,2,3,4,5].forEach(function(number){
-            r.selectors['[js_player="_"] [js_hint="number"][js_val="_"]'._(p.name, number)] = {'hide': 0};
+            r.selectors['[js/_player="_"] [js/_hint="number"][js/_val="_"]'._(p.name, number)] = {'hide': 0};
         });
         COLORS.forEach(function(color){
-            r.selectors['[js_player="_"] [js_hint="color"][js_val="_"]'._(p.name, color)] = {'hide': 0};
+            r.selectors['[js/_player="_"] [js/_hint="color"][js/_val="_"]'._(p.name, color)] = {'hide': 0};
         });
         p.hand.forEach(function(card){
             if(!card.numberKnown) 
-                r.selectors['[js_player="_"] [js_hint="number"][js_val="_"]'._(p.name, CARDS[card.n].number)] = {'show': 0};
+                r.selectors['[js/_player="_"] [js/_hint="number"][js/_val="_"]'._(p.name, CARDS[card.n].number)] = {'show': 0};
             if(!card.colorKnown) 
-                r.selectors['[js_player="_"] [js_hint="color"][js_val="_"]'._(p.name, CARDS[card.n].color)] = {'show': 0};
+                r.selectors['[js/_player="_"] [js/_hint="color"][js/_val="_"]'._(p.name, CARDS[card.n].color)] = {'show': 0};
         });
     });
     return r;
